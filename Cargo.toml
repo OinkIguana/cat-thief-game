@@ -1,0 +1,7 @@
+[package]
+name = "steampunk-game"
+version = "0.1.0"
+authors = ["Cameron Eldridge <cameldridge+git@gmail.com>"]
+
+[dependencies]
+game-engine = { path = "../game-engine/rust" }
