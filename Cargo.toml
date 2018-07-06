@@ -6,5 +6,7 @@ authors = ["Cameron Eldridge <cameldridge+git@gmail.com>"]
 [dependencies]
 game-engine = { path = "../game-engine/rust" }
 toml = "0.4"
+specs = "0.12"
+specs-derive = "0.2"
 serde = "1.0"
 serde_derive = "1.0"
