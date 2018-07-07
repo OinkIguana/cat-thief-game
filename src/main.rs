@@ -1,5 +1,6 @@
 #![feature(macro_at_most_once_rep)]
 #![deny(bare_trait_objects)]
+#![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
 
 #[macro_use] extern crate game_engine as engine;
 #[macro_use] extern crate serde_derive;

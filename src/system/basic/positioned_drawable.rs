@@ -14,7 +14,7 @@ system! {
             drawable: &mut Component<Drawable>,
         ) {
             for (position, mut drawable) in (&position, &mut drawable).join() {
-                drawable.set_position(position.0);
+                drawable.set_position(position.rounded());
             }
         }
     }

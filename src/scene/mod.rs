@@ -1,4 +1,5 @@
 use system::player::movement::PlayerMovement;
+use system::basic::apply_velocity::ApplyVelocity;
 use system::basic::positioned_drawable::PositionedDrawable;
 use entity::player::Player;
 
@@ -9,7 +10,8 @@ scene! {
         ],
         systems: [
             (PlayerMovement::default(), "PlayerMovement", &[]),
-            (PositionedDrawable::default(), "PositionedDrawable", &["PlayerMovement"]),
+            (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
+            (PositionedDrawable::default(), "PositionedDrawable", &["ApplyVelocity"]),
         ]
     }
 }

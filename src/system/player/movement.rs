@@ -1,6 +1,6 @@
 use engine::prelude::*;
 use component::marker::Player;
-use component::position::Position;
+use component::velocity::Velocity;
 use resource::constant::BaseMovementSpeed;
 use resource::control_events::ControlState;
 
@@ -11,7 +11,7 @@ system! {
     impl PlayerMovement {
         fn run(
             &mut self,
-            position: &mut Component<Position>,
+            velocity: &mut Component<Velocity>,
             player: &Component<Player>,
             control_state: &Resource<ControlState>,
             base_movement_speed: &Resource<BaseMovementSpeed>,
@@ -21,11 +21,11 @@ system! {
             let running = control_state.cancel;
             let scale = ::std::i8::MAX as f32;
             let movement_speed = if running { base_movement_speed.0 * 2 } else { base_movement_speed.0 } as f32;
-            let hspeed = (axis_h / scale * movement_speed) as i32;
-            let vspeed = (axis_v / scale * movement_speed) as i32;
+            let hspeed = axis_h / scale * movement_speed;
+            let vspeed = axis_v / scale * movement_speed;
 
-            for (_, mut position) in (&player, &mut position).join() {
-                position.0 = position.0 + Point::new(hspeed, vspeed);
+            for (_, mut velocity) in (&player, &mut velocity).join() {
+                velocity.0 = Point::new(hspeed, vspeed);
             }
         }
     }
