@@ -1,6 +1,8 @@
 use system::player::movement::PlayerMovement;
 use system::basic::apply_velocity::ApplyVelocity;
-use system::basic::positioned_drawable::PositionedDrawable;
+use system::animations::AnimateWalkCycle;
+use system::graphics::positioned_drawable::PositionedDrawable;
+use system::graphics::sprite_drawable::SpriteDrawable;
 use entity::player::Player;
 use entity::wall::Wall;
 
@@ -13,7 +15,9 @@ scene! {
         systems: [
             (PlayerMovement::default(), "PlayerMovement", &[]),
             (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
+            (AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"]),
             (PositionedDrawable::default(), "PositionedDrawable", &["ApplyVelocity"]),
+            (SpriteDrawable::default(), "SpriteDrawable", &["AnimateWalkCycle"]),
         ]
     }
 }

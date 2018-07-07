@@ -1,4 +1,4 @@
-#![feature(macro_at_most_once_rep)]
+#![feature(macro_at_most_once_rep, range_contains, const_fn)]
 #![deny(bare_trait_objects)]
 #![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
 

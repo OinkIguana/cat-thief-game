@@ -4,6 +4,6 @@ use engine::prelude::*;
 #[storage(NullStorage)]
 pub struct Player;
 
-pub fn register(game: Game) -> Game {
+pub(super) fn register(game: Game) -> Game {
     game.register_component::<Player>()
 }
