@@ -1,6 +1,6 @@
 use engine::prelude::*;
 
-use component::position::Position;
+use component::position::{Position, PreviousPosition};
 use component::velocity::Velocity;
 use component::collision_box::CollisionBox;
 
@@ -14,12 +14,16 @@ system! {
             entities: &Entities,
             velocity: &Component<Velocity>,
             position: &mut Component<Position>,
+            previous_position: &mut Component<PreviousPosition>,
             collision_box: &Component<CollisionBox>,
         ) {
             let collision_boxes: Vec<_> = (&*entities, &collision_box).join().collect();
             // NOTE: this might be a candidate for par_join, as it is potentially expensive, and
             // probably happening often
             for (entity, velocity, mut position) in (&*entities, &velocity, &mut position).join() {
+                if let Some(mut previous_position) = previous_position.get_mut(entity) {
+                    previous_position.0 = position.0;
+                }
                 let mut x_velocity = Point::new(velocity.0.x, 0f32);
                 let mut y_velocity = Point::new(0f32, velocity.0.y);
                 if let Some(collision_box) = collision_box.get(entity) {

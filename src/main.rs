@@ -10,6 +10,7 @@ extern crate specs;
 
 mod component;
 mod entity;
+mod font;
 mod image;
 mod model;
 mod plugin;
