@@ -1,3 +1,4 @@
+use engine::prelude::*;
 use component::{
     graphics::{SpriteFrame, WalkCycle, AnimationSpeed},
     velocity::Velocity,
@@ -5,7 +6,7 @@ use component::{
 };
 
 /// Animates a character's walk cycle. The speed is reduced by half when the character is not
-/// moving at its expected velocity (such as when colliding with a wall). It is assumed that the
+/// moving but is trying to (such as when colliding with a wall). It is assumed that the
 /// first frame of each direction is the idle frame, and then rest are used for the cycle.
 ///
 /// TODO: might be nice to have the animation run faster when the character is running (moving at
@@ -32,7 +33,7 @@ system! {
                 let image_speed = 
                     if let (Some(position), Some(previous_position)) = (position.get(entity), previous_position.get(entity)) {
                         let delta_pos = position.0 - previous_position.0;
-                        if (delta_pos.x.powi(2) + delta_pos.y.powi(2)).sqrt() != velocity.magnitude() {
+                        if delta_pos == Point::new(0f32, 0f32) {
                             animation_speed.0 / 2f32
                         } else {
                             animation_speed.0
