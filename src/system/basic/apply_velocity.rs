@@ -1,8 +1,10 @@
 use engine::prelude::*;
 
-use component::position::{Position, PreviousPosition};
-use component::velocity::Velocity;
-use component::collision_box::CollisionBox;
+use component::{
+    position::{Position, PreviousPosition},
+    velocity::Velocity,
+    collision_box::CollisionBox,
+};
 
 #[derive(Default, Debug)]
 pub struct ApplyVelocity;
@@ -23,6 +25,9 @@ system! {
             for (entity, velocity, mut position) in (&*entities, &velocity, &mut position).join() {
                 if let Some(mut previous_position) = previous_position.get_mut(entity) {
                     previous_position.0 = position.0;
+                }
+                if velocity.magnitude() == 0f32 {
+                    continue;
                 }
                 let mut x_velocity = Point::new(velocity.0.x, 0f32);
                 let mut y_velocity = Point::new(0f32, velocity.0.y);

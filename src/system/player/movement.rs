@@ -1,8 +1,12 @@
 use engine::prelude::*;
-use component::marker::Player;
-use component::velocity::Velocity;
-use resource::constant::BaseMovementSpeed;
-use resource::control_events::ControlState;
+use component::{
+    marker::Player,
+    velocity::Velocity,
+};
+use resource::{
+    constant::BaseMovementSpeed,
+    control_events::ControlState,
+};
 
 #[derive(Default, Debug)]
 pub struct PlayerMovement;

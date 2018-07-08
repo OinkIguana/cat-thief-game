@@ -1,11 +1,14 @@
 use engine::Game;
 
 mod sprite;
-pub use self::sprite::{Sprite, SpriteFrame};
 mod walk_cycle;
-pub use self::walk_cycle::WalkCycle;
 mod animation_speed;
-pub use self::animation_speed::AnimationSpeed;
+
+pub use self::{
+    sprite::{Sprite, SpriteFrame},
+    animation_speed::AnimationSpeed,
+    walk_cycle::WalkCycle,
+};
 
 pub(super) fn register(game: Game) -> Game {
     game.register_component::<Sprite>()

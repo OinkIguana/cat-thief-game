@@ -1,6 +1,8 @@
 use engine::prelude::*;
-use resource::control_events::{ControlEvent, ControlEvents, ControlState};
-use resource::control_scheme::{ControlScheme, Control};
+use resource::{
+    control_events::{ControlEvent, ControlEvents, ControlState},
+    control_scheme::{ControlScheme, Control},
+};
 
 pub fn process_control_events(world: &mut World) {
     let control_scheme = world.read_resource::<ControlScheme>();

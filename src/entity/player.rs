@@ -1,9 +1,11 @@
 use engine::prelude::*;
-use component::marker;
-use component::graphics::{Sprite, SpriteFrame, AnimationSpeed, WalkCycle};
-use component::position::{Position, PreviousPosition};
-use component::velocity::Velocity;
-use component::collision_box::CollisionBox;
+use component::{
+    marker,
+    graphics::{Sprite, SpriteFrame, AnimationSpeed, WalkCycle},
+    position::{Position, PreviousPosition},
+    velocity::Velocity,
+    collision_box::CollisionBox,
+};
 use sprite::MALE_WALKCYCLE;
 use model::direction::Direction;
 

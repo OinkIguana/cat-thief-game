@@ -1,6 +1,8 @@
-use component::graphics::{SpriteFrame, WalkCycle, AnimationSpeed};
-use component::velocity::Velocity;
-use component::position::{Position, PreviousPosition};
+use component::{
+    graphics::{SpriteFrame, WalkCycle, AnimationSpeed},
+    velocity::Velocity,
+    position::{Position, PreviousPosition},
+};
 
 /// Animates a character's walk cycle. The speed is reduced by half when the character is not
 /// moving at its expected velocity (such as when colliding with a wall). It is assumed that the

@@ -1,10 +1,16 @@
-use system::player::movement::PlayerMovement;
-use system::basic::apply_velocity::ApplyVelocity;
-use system::animations::AnimateWalkCycle;
-use system::graphics::positioned_drawable::PositionedDrawable;
-use system::graphics::sprite_drawable::SpriteDrawable;
-use entity::player::Player;
-use entity::wall::Wall;
+use system::{
+    player::movement::PlayerMovement,
+    basic::apply_velocity::ApplyVelocity,
+    animations::AnimateWalkCycle,
+    graphics::{
+        positioned_drawable::PositionedDrawable,
+        sprite_drawable::SpriteDrawable,
+    },
+};
+use entity::{
+    player::Player,
+    wall::Wall,
+};
 
 scene! {
     pub START {
