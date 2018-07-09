@@ -1,4 +1,5 @@
 use engine::prelude::*;
+use model::direction::Direction;
 use component::{
     marker,
     graphics::{Sprite, SpriteFrame, AnimationSpeed, WalkCycle},
@@ -7,7 +8,6 @@ use component::{
     collision_box::CollisionBox,
 };
 use sprite::MALE_WALKCYCLE;
-use model::direction::Direction;
 
 entity! {
     pub Player(x: i32, y: i32) {
@@ -15,7 +15,7 @@ entity! {
         Position::new(x, y),
         PreviousPosition::default(),
         Velocity::default(),
-        CollisionBox::new(0, 0, 32, 32),
+        CollisionBox::new(0, 32, 32, 32),
         Sprite::new(&MALE_WALKCYCLE),
         SpriteFrame::default(),
         Drawable::default(),

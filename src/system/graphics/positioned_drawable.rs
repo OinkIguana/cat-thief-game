@@ -1,5 +1,4 @@
 //! Uses the [`Position`] component to move the [`Drawable`]
-
 use engine::prelude::*;
 use component::position::Position;
 
