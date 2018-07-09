@@ -18,6 +18,7 @@ mod resource;
 mod scene;
 mod sprite;
 mod system;
+mod tile_set;
 
 use engine::prelude::*;
 
