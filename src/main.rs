@@ -7,6 +7,7 @@
 extern crate serde;
 extern crate specs;
 #[macro_use] extern crate specs_derive;
+#[macro_use] extern crate lazy_static;
 
 mod component;
 mod entity;
@@ -18,6 +19,7 @@ mod resource;
 mod scene;
 mod sprite;
 mod system;
+mod tile_grid;
 mod tile_set;
 
 use engine::prelude::*;

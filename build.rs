@@ -35,6 +35,11 @@ fn main() {
     let tile_sets_out_path = dest_path.join("tile_sets.rs");
     let mut tile_sets_out_file = File::create(tile_sets_out_path).unwrap();
     write_tile_sets(&mut tile_sets_out_file, fs::read_dir(tile_sets_dir).unwrap());
+
+    let tile_grids_dir = resources_dir.join("tile_grid");
+    let tile_grids_out_path = dest_path.join("tile_grids.rs");
+    let mut tile_grids_out_file = File::create(tile_grids_out_path).unwrap();
+    write_tile_grids(&mut tile_grids_out_file, fs::read_dir(tile_grids_dir).unwrap());
 }
 
 fn write_images<'a, W: Write>(file: &mut W, paths: ReadDir) {
@@ -110,7 +115,7 @@ fn write_fonts<'a, W: Write>(file: &mut W, paths: ReadDir) {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Copy, Clone, Deserialize)]
 struct Dimen {
     width: u32,
     height: u32,
@@ -122,7 +127,7 @@ impl ::std::fmt::Display for Dimen {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Copy, Clone, Deserialize)]
 struct Point {
     x: u32,
     y: u32,
@@ -168,6 +173,57 @@ fn write_tile_sets<'a, W: Write>(file: &mut W, paths: ReadDir) {
                 tile_set.size,
                 tile_set.origin,
                 tile_set.spacing,
+            ).unwrap();
+        }
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum Tile {
+    None,
+    Some(usize, u32),
+}
+
+#[derive(Deserialize)]
+struct TileGridSpec {
+    tile_sets: Vec<String>,
+    offset: Option<Point>,
+    size: Dimen,
+    tiles: Vec<Tile>,
+}
+
+fn write_tile_grids<'a, W: Write>(file: &mut W, paths: ReadDir) {
+    for path in paths {
+        let path = path.unwrap().path();
+        if path.is_dir() {
+            writeln!(file, "pub mod {} {{", path.file_name().unwrap().to_str().unwrap().to_owned().to_lowercase()).unwrap();
+            writeln!(file, "use super::{{image, TileSet, Point, Dimen}};").unwrap();
+            let sub_paths = fs::read_dir(path).unwrap();
+            write_tile_sets(file, sub_paths);
+            writeln!(file, "}}").unwrap();
+        } else if path.extension() == Some(&OsStr::new("toml")) {
+            let name = path.file_stem().unwrap();
+            let const_name = name.to_str().unwrap().to_owned().to_uppercase();
+            let toml_str = fs::read_to_string(&path).unwrap();
+            let tile_grid: TileGridSpec = from_str(&toml_str).unwrap();
+            writeln!(
+                file, 
+                "lazy_static! {{ pub static ref {}: TileGrid = TileGrid::new({}, {}, vec![{}]); }}", 
+                const_name, 
+                tile_grid.offset.unwrap_or(Point { x: 0, y: 0 }),
+                tile_grid.size,
+                tile_grid
+                    .tiles
+                    .iter()
+                    .map(|tile| {
+                        match tile {
+                            Tile::Some(set, index) => format!("Some(Tile{{tile_set: &tile_set::{}, index: {}}})", tile_grid.tile_sets[*set], index),
+                            Tile::None => "None".to_owned()
+                        }
+                    })
+                    .collect::<Vec<_>>()
+                    .join(",")
             ).unwrap();
         }
     }

@@ -1,3 +1,5 @@
+use engine::prelude::*;
+
 use system::{
     player::movement::PlayerMovement,
     basic::apply_velocity::ApplyVelocity,
@@ -12,6 +14,8 @@ use entity::{
     wall::Wall,
 };
 
+use tile_grid::GRASSY;
+
 scene! {
     pub START {
         entities: [
@@ -25,5 +29,8 @@ scene! {
             (PositionedDrawable::default(), "PositionedDrawable", &["ApplyVelocity"]),
             (SpriteDrawable::default(), "SpriteDrawable", &["AnimateWalkCycle"]),
         ]
+    } => |builder| {
+        builder.get_resource_mut::<TileLayers>().set(-1, GRASSY.clone());
+        builder
     }
 }
