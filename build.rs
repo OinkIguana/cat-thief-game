@@ -2,13 +2,15 @@ extern crate toml;
 extern crate serde;
 #[macro_use] extern crate serde_derive;
 
-use std::env;
-use std::path::PathBuf;
-use std::fs::{self, File, ReadDir};
-use std::io::Write;
-use std::ffi::OsStr;
+use std::{
+    env,
+    path::PathBuf,
+    fs::{self, File, ReadDir},
+    io::Write,
+    ffi::OsStr,
+};
 
-use toml::{from_str, Value};
+use toml::from_str;
 
 // Generates the images, sprites, and fonts modules
 fn main() {
@@ -88,6 +90,18 @@ fn write_sprites<'a, W: Write>(file: &mut W, paths: ReadDir) {
     }
 }
 
+#[derive(Deserialize)]
+struct FontSpec {
+    styles: Vec<Font>,
+}
+
+#[derive(Deserialize)]
+struct Font {
+    name: String,
+    file: String,
+    sizes: Vec<u32>,
+}
+
 fn write_fonts<'a, W: Write>(file: &mut W, paths: ReadDir) {
     for path in paths {
         let path = path.unwrap().path();
@@ -96,17 +110,12 @@ fn write_fonts<'a, W: Write>(file: &mut W, paths: ReadDir) {
             writeln!(file, "pub mod {} {{", name.to_str().unwrap().to_owned()).unwrap();
             writeln!(file, "use super::Font;").unwrap();
             let toml_str = fs::read_to_string(&path).unwrap();
-            let value = toml_str.parse::<Value>().unwrap();
-            let styles = value["styles"].as_array().unwrap();
-            for style in styles {
-                let filename = style["file"].as_str().unwrap();
-                let stylename = style["name"].as_str().unwrap();
-                let sizes = style["sizes"].as_array().unwrap();
-                for size in sizes {
-                    let size = size.as_integer().unwrap();
-                    let const_name = format!("{}_{}", stylename.to_uppercase(), size);
-                    let mut file_path = PathBuf::from("font/ttf");
-                    file_path.push(filename);
+            let fonts: FontSpec = from_str(&toml_str).unwrap();
+            for font in fonts.styles {
+                let mut file_path = PathBuf::from("font/ttf");
+                file_path.push(font.file);
+                for size in font.sizes {
+                    let const_name = format!("{}_{}", font.name.to_uppercase(), size);
                     writeln!(file, "pub const {}: Font = Font::new({:?}, {});", const_name, file_path, size).unwrap();
                 }
             }
