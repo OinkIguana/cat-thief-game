@@ -2,6 +2,7 @@
 name = "steampunk-game"
 version = "0.1.0"
 authors = ["Cameron Eldridge <cameldridge+git@gmail.com>"]
+build = "build/mod.rs"
 
 [dependencies]
 game-engine = { path = "../game-engine/rust" }
@@ -16,4 +17,4 @@ lazy_static = "1.0"
 toml = "0.4"
 serde = "1.0"
 serde_derive = "1.0"
-
+serde-xml-rs = "0.2"

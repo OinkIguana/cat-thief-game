@@ -14,7 +14,7 @@ use entity::{
     wall::Wall,
 };
 
-use tile_grid::GRASSY;
+use tile_grid::town;
 
 scene! {
     pub START {
@@ -30,7 +30,15 @@ scene! {
             (SpriteDrawable::default(), "SpriteDrawable", &["AnimateWalkCycle"]),
         ]
     } => |builder| {
-        builder.get_resource_mut::<TileLayers>().set(-1, GRASSY.clone());
+        {
+            let mut layers = builder.get_resource_mut::<TileLayers>();
+            layers.set(-5, town::WATER.clone());
+            layers.set(-4, town::GROUND.clone());
+            layers.set(-3, town::WALLS.clone());
+            layers.set(-2, town::OBSTACLES.clone());
+            layers.set(-1, town::DOORS.clone());
+            layers.set(1, town::ROOFS.clone());
+        }
         builder
     }
 }

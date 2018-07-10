@@ -1,6 +1,7 @@
-image = "GRASS"
-count = 15
-per_row = 3
+image = "HOUSE"
+count = 64
+per_row = 9
 size = { width = 32, height = 32 }
 origin = { x = 0, y = 0 }
 spacing = { width = 0, height = 0 }
+

@@ -1,0 +1,7 @@
+image = "BARREL"
+count = 8
+per_row = 4
+size = { width = 32, height = 32 }
+origin = { x = 0, y = 0 }
+spacing = { width = 0, height = 0 }
+
