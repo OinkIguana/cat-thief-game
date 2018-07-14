@@ -1,6 +1,7 @@
 use engine::prelude::*;
 
 use component::{
+    marker::Solid,
     position::{Position, PreviousPosition},
     velocity::Velocity,
     collision_box::CollisionBox,
@@ -18,17 +19,18 @@ system! {
             position: &mut Component<Position>,
             previous_position: &mut Component<PreviousPosition>,
             collision_box: &Component<CollisionBox>,
+            solid: &Component<Solid>,
             ) {
-            let collision_boxes: Vec<_> = (&*entities, &collision_box)
+            let collision_boxes: Vec<_> = (&*entities, &collision_box, &solid)
                 .join()
-                .map(|(entity, collision_box)| {
+                .map(|(entity, collision_box, _)| {
                     if let Some(position) = position.get(entity) {
                         (entity, collision_box.at(position.0))
                     } else {
                         (entity, collision_box.0)
                     }
                 })
-            .collect();
+                .collect();
             // NOTE: this might be a candidate for par_join, as it is potentially expensive, and
             // probably happening often
             for (entity, velocity, mut position) in (&*entities, &velocity, &mut position).join() {
@@ -39,7 +41,7 @@ system! {
                     continue;
                 }
                 let mut final_velocity = velocity.0;
-                if let Some(collision_box) = collision_box.get(entity) {
+                if let (Some(_), Some(collision_box)) = (solid.get(entity), collision_box.get(entity)) {
                     let collisions: Vec<_> = {
                         let destination = collision_box.at(position.0 + final_velocity);
                         collision_boxes

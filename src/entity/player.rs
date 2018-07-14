@@ -11,7 +11,8 @@ use sprite::MALE_WALKCYCLE;
 
 entity! {
     pub Player(x: i32, y: i32) {
-        marker::Player::default(),
+        marker::Player,
+        marker::Solid,
         Position::new(x, y),
         PreviousPosition::default(),
         Velocity::default(),
