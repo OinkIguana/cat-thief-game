@@ -1,5 +1,6 @@
 use engine::prelude::*;
 
+pub mod behavior;
 pub mod graphics;
 pub mod collision_box;
 pub mod marker;

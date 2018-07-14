@@ -8,10 +8,3 @@ pub struct Player;
 #[derive(Component, Copy, Clone, Default, Debug)]
 #[storage(NullStorage)]
 pub struct Solid;
-
-pub(super) fn register(game: Game) -> Game {
-    game.register_component::<Player>()
-        .register_component::<Solid>()
-}
-
-

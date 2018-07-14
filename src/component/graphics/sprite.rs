@@ -10,6 +10,19 @@ impl Sprite {
     }
 }
 
+#[derive(Component, Clone, Eq, PartialEq, Debug)]
+pub struct SpriteLayers(pub Vec<&'static engine::Sprite>);
+
+impl SpriteLayers {
+    pub fn new(sprites: Vec<&'static engine::Sprite>) -> Self {
+        SpriteLayers(sprites)
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &engine::Sprite> {
+        self.0.iter().cloned()
+    }
+}
+
 #[derive(Component, Copy, Clone, PartialEq, PartialOrd, Default, Debug)]
 pub struct SpriteFrame(pub f32);
 
