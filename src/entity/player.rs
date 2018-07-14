@@ -17,7 +17,7 @@ entity! {
         Velocity::default(),
         CollisionBox::new(16, 32, 32, 32),
         Sprite::new(&MALE_WALKCYCLE),
-        SpriteFrame::default(),
+        SpriteFrame::new(18),
         Drawable::default(),
         AnimationSpeed::new(0.5),
         WalkCycle::new([

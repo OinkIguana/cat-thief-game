@@ -10,6 +10,7 @@ extern crate specs;
 #[macro_use] extern crate lazy_static;
 
 mod component;
+mod constant;
 mod entity;
 mod font;
 mod image;

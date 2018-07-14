@@ -1,5 +1,6 @@
 use engine::prelude::*;
 
+use constant::TILE_SIZE;
 use system::{
     player::movement::PlayerMovement,
     basic::apply_velocity::ApplyVelocity,
@@ -15,7 +16,7 @@ use tile_grid::town;
 scene! {
     pub START {
         entities: [
-            Player(656, 320),
+            Player(TILE_SIZE * 20 + TILE_SIZE / 2, 10 * TILE_SIZE),
         ],
         systems: [
             (PlayerMovement::default(), "PlayerMovement", &[]),
