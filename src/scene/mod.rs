@@ -9,18 +9,13 @@ use system::{
         sprite_drawable::SpriteDrawable,
     },
 };
-use entity::{
-    player::Player,
-    wall::Wall,
-};
-
+use entity::player::Player;
 use tile_grid::town;
 
 scene! {
     pub START {
         entities: [
-            Player(128, 128),
-            Wall(0, 0, 1024, 32),
+            Player(656, 320),
         ],
         systems: [
             (PlayerMovement::default(), "PlayerMovement", &[]),
@@ -39,6 +34,6 @@ scene! {
             layers.set(-1, town::DOORS.clone());
             layers.set(1, town::ROOFS.clone());
         }
-        builder
+        builder.pipe(town::collisions)
     }
 }

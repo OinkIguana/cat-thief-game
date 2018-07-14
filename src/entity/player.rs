@@ -15,7 +15,7 @@ entity! {
         Position::new(x, y),
         PreviousPosition::default(),
         Velocity::default(),
-        CollisionBox::new(0, 32, 32, 32),
+        CollisionBox::new(16, 32, 32, 32),
         Sprite::new(&MALE_WALKCYCLE),
         SpriteFrame::default(),
         Drawable::default(),

@@ -16,7 +16,6 @@ pub struct Font {
     pub sizes: Vec<u32>,
 }
 
-
 #[derive(Copy, Clone, Deserialize)]
 pub struct Dimen {
     pub width: u32,
@@ -70,6 +69,8 @@ pub struct TileGridSpec {
 pub struct TiledTMXSpec {
     pub width: String,
     pub height: String,
+    pub tilewidth: String,
+    pub tileheight: String,
     #[serde(rename = "tileset", default)]
     pub tilesets: Vec<TiledTMXTileset>,
     #[serde(rename = "layer", default)]
@@ -79,6 +80,8 @@ pub struct TiledTMXSpec {
 pub struct TiledSpec {
     pub width: u32,
     pub height: u32,
+    pub tilewidth: u32,
+    pub tileheight: u32,
     pub tilesets: Vec<TiledTileset>,
     pub layers: Vec<TiledLayer>,
 }
@@ -88,6 +91,8 @@ impl TiledTMXSpec {
         TiledSpec {
             width: self.width.parse::<u32>().unwrap(),
             height: self.height.parse::<u32>().unwrap(),
+            tilewidth: self.tilewidth.parse::<u32>().unwrap(),
+            tileheight: self.tileheight.parse::<u32>().unwrap(),
             tilesets: self.tilesets.into_iter().map(TiledTMXTileset::resolve).collect(),
             layers: self.layers.into_iter().map(TiledTMXLayer::resolve).collect(),
         }

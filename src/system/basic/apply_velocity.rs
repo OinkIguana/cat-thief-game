@@ -18,8 +18,17 @@ system! {
             position: &mut Component<Position>,
             previous_position: &mut Component<PreviousPosition>,
             collision_box: &Component<CollisionBox>,
-        ) {
-            let collision_boxes: Vec<_> = (&*entities, &collision_box).join().collect();
+            ) {
+            let collision_boxes: Vec<_> = (&*entities, &collision_box)
+                .join()
+                .map(|(entity, collision_box)| {
+                    if let Some(position) = position.get(entity) {
+                        (entity, collision_box.at(position.0))
+                    } else {
+                        (entity, collision_box.0)
+                    }
+                })
+            .collect();
             // NOTE: this might be a candidate for par_join, as it is potentially expensive, and
             // probably happening often
             for (entity, velocity, mut position) in (&*entities, &velocity, &mut position).join() {
@@ -29,25 +38,43 @@ system! {
                 if velocity.magnitude() == 0f32 {
                     continue;
                 }
-                let mut x_velocity = Point::new(velocity.0.x, 0f32);
-                let mut y_velocity = Point::new(0f32, velocity.0.y);
+                let mut final_velocity = velocity.0;
                 if let Some(collision_box) = collision_box.get(entity) {
-                    for collision in collision_boxes.iter().filter(|(e, _)| *e != entity).map(|(_, b)| b) {
-                        let mut final_x = collision_box.at(position.0 + x_velocity);
-                        let mut final_y = collision_box.at(position.0 + y_velocity);
-                        while collision.0.overlaps(&final_x) {
-                            x_velocity.x -= x_velocity.x.signum() * f32::min(x_velocity.x.abs(), 1f32);
-                            final_x = collision_box.at(position.0 + x_velocity);
+                    let collisions: Vec<_> = {
+                        let destination = collision_box.at(position.0 + final_velocity);
+                        collision_boxes
+                            .iter()
+                            .filter(|(e, _)| *e != entity)
+                            .map(|(_, b)| b)
+                            .filter(|b| b.overlaps(&destination))
+                            .collect()
+                    };
+
+                    let mut x_velocity = 0f32;
+                    let mut y_velocity = 0f32;
+                    'find_x: for dx in 0..=final_velocity.x.abs() as u32 {
+                        let x_vel = Point::new(final_velocity.x.signum() * dx as f32, 0f32);
+                        let destination = collision_box.at(position.0+ x_vel);
+                        for collision in &collisions {
+                            if destination.overlaps(&collision) {
+                                break 'find_x;
+                            }
                         }
-                        while collision.0.overlaps(&final_y) {
-                            y_velocity.y -= y_velocity.y.signum() * f32::min(y_velocity.y.abs(), 1f32);
-                            final_y = collision_box.at(position.0 + y_velocity);
-                        }
+                        x_velocity = x_vel.x;
                     }
-                    position.0 = position.0 + x_velocity + y_velocity;
-                } else {
-                    position.0 = position.0 + velocity.0;
+                    'find_y: for dy in 0..=final_velocity.y.abs() as u32 {
+                        let y_vel = Point::new(x_velocity, final_velocity.y.signum() * dy as f32);
+                        let destination = collision_box.at(position.0 + y_vel);
+                        for collision in &collisions {
+                            if destination.overlaps(&collision) {
+                                break 'find_y;
+                            }
+                        }
+                        y_velocity = y_vel.y;
+                    }
+                    final_velocity = Point::new(x_velocity, y_velocity);
                 }
+                position.0 = position.0 + final_velocity;
             }
         }
     }
