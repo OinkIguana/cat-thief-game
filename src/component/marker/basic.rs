@@ -8,3 +8,7 @@ pub struct Player;
 #[derive(Component, Copy, Clone, Default, Debug)]
 #[storage(NullStorage)]
 pub struct Solid;
+
+#[derive(Component, Copy, Clone, Default, Debug)]
+#[storage(NullStorage)]
+pub struct CameraTarget;

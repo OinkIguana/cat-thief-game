@@ -99,18 +99,18 @@ pub fn process_control_events(world: &mut World) {
         }
     }
 
-    match control_scheme.option {
+    match control_scheme.run {
         Control::Key(key) => {
-            control_state.option = keyboard_state.key_pressed(key);
+            control_state.run = keyboard_state.key_pressed(key);
         }
         Control::MouseButton(MouseButton::Left) => {
-            control_state.option = mouse_state.left_pressed();
+            control_state.run = mouse_state.left_pressed();
         }
         Control::MouseButton(MouseButton::Right) => {
-            control_state.option = mouse_state.right_pressed();
+            control_state.run = mouse_state.right_pressed();
         }
         Control::MouseButton(MouseButton::Middle) => {
-            control_state.option = mouse_state.middle_pressed();
+            control_state.run = mouse_state.middle_pressed();
         }
     }
 
@@ -137,8 +137,8 @@ pub fn process_control_events(world: &mut World) {
             if Control::Key(key) == control_scheme.menu {
                 control_events.add(ControlEvent::Menu(None));
             }
-            if Control::Key(key) == control_scheme.option {
-                control_events.add(ControlEvent::Option(None));
+            if Control::Key(key) == control_scheme.run {
+                control_events.add(ControlEvent::Run(None));
             }
         }
     }
@@ -154,8 +154,8 @@ pub fn process_control_events(world: &mut World) {
             if Control::MouseButton(button) == control_scheme.menu {
                 control_events.add(ControlEvent::Menu(Some(position)));
             }
-            if Control::MouseButton(button) == control_scheme.option {
-                control_events.add(ControlEvent::Option(Some(position)));
+            if Control::MouseButton(button) == control_scheme.run {
+                control_events.add(ControlEvent::Run(Some(position)));
             }
         }
     }

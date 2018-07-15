@@ -22,7 +22,7 @@ system! {
         ) {
             let axis_h = control_state.axis_h as f32;
             let axis_v = control_state.axis_v as f32;
-            let running = control_state.cancel;
+            let running = control_state.run;
             let scale = ::std::i8::MAX as f32;
             let movement_speed = if running { base_movement_speed.0 * 2 } else { base_movement_speed.0 } as f32;
             let hspeed = axis_h / scale * movement_speed;

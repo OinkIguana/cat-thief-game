@@ -3,7 +3,10 @@ use engine::prelude::*;
 use constant::TILE_SIZE;
 use system::{
     player::movement::PlayerMovement,
-    basic::apply_velocity::ApplyVelocity,
+    basic::{
+        apply_velocity::ApplyVelocity,
+        camera_target::CameraTarget,
+    },
     animations::AnimateWalkCycle,
     graphics::{
         positioned_drawable::PositionedDrawable,
@@ -21,6 +24,7 @@ scene! {
         systems: [
             (PlayerMovement::default(), "PlayerMovement", &[]),
             (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
+            (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
             (AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"]),
             (PositionedDrawable::default(), "PositionedDrawable", &["ApplyVelocity"]),
             (SpriteDrawable::default(), "SpriteDrawable", &["AnimateWalkCycle"]),

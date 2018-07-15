@@ -13,6 +13,7 @@ entity! {
     pub Player(x: i32, y: i32) {
         marker::Player,
         marker::Solid,
+        marker::CameraTarget,
         Position::new(x, y),
         PreviousPosition::default(),
         Velocity::default(),

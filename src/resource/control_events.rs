@@ -11,7 +11,7 @@ pub enum ControlEvent {
     Action(Option<Point>),
     Cancel(Option<Point>),
     Menu(Option<Point>),
-    Option(Option<Point>),
+    Run(Option<Point>),
 }
 
 #[derive(Clone, Default, Debug)]
@@ -38,5 +38,5 @@ pub struct ControlState {
     pub action: bool,
     pub cancel: bool,
     pub menu: bool,
-    pub option: bool,
+    pub run: bool,
 }

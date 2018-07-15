@@ -20,7 +20,7 @@ pub struct ControlScheme {
     pub action: Control,
     pub cancel: Control,
     pub menu: Control,
-    pub option: Control,
+    pub run: Control,
 }
 
 impl Default for ControlScheme {
@@ -33,7 +33,7 @@ impl Default for ControlScheme {
             action: Control::Key(Key::Z),
             cancel: Control::Key(Key::C),
             menu: Control::Key(Key::X),
-            option: Control::Key(Key::E),
+            run: Control::Key(Key::LShift),
         }
     }
 }
