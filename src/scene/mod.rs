@@ -6,19 +6,20 @@ use system::{
     basic::{
         apply_velocity::ApplyVelocity,
         camera_target::CameraTarget,
+        update_drawable::UpdateDrawable,
     },
     animations::AnimateWalkCycle,
-    graphics::{
-        positioned_drawable::PositionedDrawable,
-        sprite_drawable::SpriteDrawable,
-    },
 };
-use entity::player::Player;
+use entity::{
+    meta::Dialog,
+    player::Player,
+};
 use tile_grid::town;
 
 scene! {
     pub START {
         entities: [
+            Dialog,
             Player(TILE_SIZE * 20 + TILE_SIZE / 2, 10 * TILE_SIZE),
         ],
         systems: [
@@ -26,8 +27,7 @@ scene! {
             (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
             (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
             (AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"]),
-            (PositionedDrawable::default(), "PositionedDrawable", &["ApplyVelocity"]),
-            (SpriteDrawable::default(), "SpriteDrawable", &["AnimateWalkCycle"]),
+            (UpdateDrawable::default(), "UpdateDrawable", &["AnimateWalkCycle"]),
         ]
     } => |builder| {
         {

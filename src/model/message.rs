@@ -28,4 +28,8 @@ impl Message {
     pub fn message(&self) -> &PrettyString {
         &self.message
     }
+
+    pub fn len(&self) -> usize {
+        self.message.len()
+    }
 }

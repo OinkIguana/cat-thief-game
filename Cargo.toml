@@ -5,7 +5,7 @@ authors = ["Cameron Eldridge <cameldridge+git@gmail.com>"]
 build = "build/mod.rs"
 
 [dependencies]
-game-engine = { path = "../game-engine/rust" }
+game-engine = { path = "../game-engine/rust", features = ["perf"] }
 toml = "0.4"
 specs = "0.12"
 specs-derive = "0.2"

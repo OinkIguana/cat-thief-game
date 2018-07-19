@@ -1,12 +1,12 @@
-use engine::prelude::*;
 use model::direction::Direction;
 use component::{
     marker,
-    graphics::{SpriteLayers, SpriteFrame, AnimationSpeed, WalkCycle},
+    graphics::{SpriteFrame, DrawDepth, AnimationSpeed, WalkCycle},
     position::{Position, PreviousPosition},
     velocity::Velocity,
     collision_box::CollisionBox,
 };
+use drawable::SpriteDrawable;
 use sprite::{MALE_WALKCYCLE, MALE_PANTS};
 
 entity! {
@@ -18,9 +18,9 @@ entity! {
         PreviousPosition::default(),
         Velocity::default(),
         CollisionBox::new(16, 32, 32, 32),
-        SpriteLayers::new(vec![&MALE_WALKCYCLE, &MALE_PANTS]),
         SpriteFrame::new(18),
-        Drawable::default(),
+        DrawDepth::new(0),
+        SpriteDrawable::boxed(vec![&MALE_WALKCYCLE, &MALE_PANTS]),
         AnimationSpeed::new(0.5),
         WalkCycle::new([
             (Direction::from_deg(270f64), 0..9),

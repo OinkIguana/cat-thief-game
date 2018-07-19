@@ -41,6 +41,13 @@ impl PrettyString {
         }
         return output;
     }
+
+    pub fn len(&self) -> usize {
+        self.0
+            .iter()
+            .map(|(string, _)| string.len())
+            .fold(0, |a, b| a + b)
+    }
 }
 
 impl<'a> PrettyStringSegment for &'a str {

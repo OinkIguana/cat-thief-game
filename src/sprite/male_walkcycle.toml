@@ -1,4 +1,5 @@
 image = "MALE_WALKCYCLE"
+dimensions = { width = 576, height = 256 }
 frames = [
   [0, 0, 64, 64],
   [64, 0, 64, 64],
@@ -40,4 +41,3 @@ frames = [
   [448, 192, 64, 64],
   [512, 192, 64, 64],
 ]
-
