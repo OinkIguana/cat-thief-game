@@ -1,5 +1,7 @@
+use std::any::Any;
 use engine::{self, prelude::*};
 
+#[derive(Debug)]
 pub struct SpriteDrawable {
     pub depth: i32,
     pub position: Point,
@@ -17,8 +19,6 @@ impl SpriteDrawable {
         })
     }
 }
-
-use std::any::Any;
 
 impl Drawable for SpriteDrawable {
     fn depth(&self) -> i32 {

@@ -6,7 +6,9 @@ use system::{
     basic::{
         apply_velocity::ApplyVelocity,
         camera_target::CameraTarget,
-        update_drawable::UpdateDrawable,
+    },
+    drawable::{
+        sprite::MaintainSpriteDrawable,
     },
     animations::AnimateWalkCycle,
 };
@@ -27,7 +29,7 @@ scene! {
             (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
             (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
             (AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"]),
-            (UpdateDrawable::default(), "UpdateDrawable", &["AnimateWalkCycle"]),
+            (MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"]),
         ]
     } => |builder| {
         {

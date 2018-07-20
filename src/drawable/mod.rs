@@ -1,4 +1,6 @@
+mod dialog;
 mod sprite;
 pub use self::{
-    sprite::SpriteDrawable
+    dialog::DialogDrawable,
+    sprite::SpriteDrawable,
 };
