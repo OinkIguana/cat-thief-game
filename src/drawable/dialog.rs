@@ -62,11 +62,16 @@ impl Drawable for DialogDrawable {
 
             let lines = segments.0
                 .iter()
-                .flat_map(|(text, attributes)|
-                    text.split("\n")
-                        .map(move |line| (line.to_owned(), attributes.clone()))
-                )
-                .fold(Ok(vec![Line::default()]), |lines: engine::Result<Vec<Line>>, (text, attributes)| {
+                .flat_map(|(text, attributes)| {
+                    let lines: Vec<_> = text.split("\n").collect();
+                    let len = lines.len();
+                    lines 
+                        .iter()
+                        .enumerate()
+                        .map(move |(i, line)| (line.to_string(), attributes.clone(), i != len - 1))
+                        .collect::<Vec<_>>()
+                })
+                .fold(Ok(vec![Line::default()]), |lines: engine::Result<Vec<Line>>, (text, attributes, newline)| {
                     let mut lines = lines?;
                     canvas.set_font(DEFAULT_FONT);
                     for attribute in &attributes {
@@ -76,7 +81,6 @@ impl Drawable for DialogDrawable {
                         }
                     }
                     let Dimen { width, height } = canvas.measure_text(text.to_owned())?;
-                    lines.last_mut().unwrap().height = u32::max(lines.last().unwrap().height, height);
                     if lines.last().unwrap().width + width > max_width {
                         let len = text.len();
                         // TODO: could probably binary search here if it's too slow
@@ -90,8 +94,9 @@ impl Drawable for DialogDrawable {
                                     continue;
                                 }
                             }
-                            for current_line in lines.last_mut() {
+                            if let Some(current_line) = lines.last_mut() {
                                 current_line.width += width;
+                                current_line.height = u32::max(current_line.height, height);
                                 current_line.segments.push((text[start..end].to_owned(), attributes.clone(), Dimen { width, height }));
                             }
                             lines.push(Line::default());
@@ -103,7 +108,11 @@ impl Drawable for DialogDrawable {
                     } else {
                         let current_line = lines.last_mut().unwrap();
                         current_line.width += width;
+                        current_line.height = u32::max(current_line.height, height);
                         current_line.segments.push((text, attributes, Dimen { width, height }));
+                    }
+                    if newline {
+                        lines.push(Line::default());
                     }
                     Ok(lines)
                 })?;
@@ -112,6 +121,7 @@ impl Drawable for DialogDrawable {
                 let mut x = H_PADDING;
                 // TODO: this probably doesn't have so good baseline alignment
                 for (text, attributes, Dimen { width, height }) in line.segments {
+                    if text.is_empty() { break; }
                     canvas.set_font(DEFAULT_FONT);
                     canvas.set_color(Color::BLACK);
                     for attribute in attributes {

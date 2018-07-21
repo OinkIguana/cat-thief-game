@@ -6,13 +6,13 @@ pub struct DialogProgress(Option<f32>);
 
 impl Default for DialogProgress {
     fn default() -> Self {
-        DialogProgress(Some(0f32))
+        DialogProgress(Some(1f32))
     }
 }
 
 impl DialogProgress {
     pub fn reset(&mut self) {
-        self.0 = Some(0f32);
+        self.0 = Some(1f32);
     }
 
     pub fn skip(&mut self) {

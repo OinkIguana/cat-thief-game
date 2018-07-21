@@ -17,6 +17,10 @@ use system::{
     animations::AnimateWalkCycle,
 };
 use resource::dialog_messages::DialogMessages;
+use model::{
+    message::Message,
+    pretty_string::{PrettyString, Attribute}
+};
 use entity::{
     meta::Dialog,
     player::Player,
@@ -48,7 +52,17 @@ scene! {
             layers.set(-1, town::DOORS.clone());
             layers.set(1, town::ROOFS.clone());
         }
-        builder.get_resource_mut::<DialogMessages>().add("Hello ths is a message");
+        builder.get_resource_mut::<DialogMessages>().add("Hello this is a message");
+        builder.get_resource_mut::<DialogMessages>().add("Hello this is a message\nHahaha it's two lines long");
+        builder.get_resource_mut::<DialogMessages>().add("lalala this is super long lalalal ahahahah librlaib laihe bliahs eliah slibha lsiehg alishe glaishe liashe glgiah segligah selifha lsiehf falieh alishe fliahse efiahs eflfiahe leifha sleihf a");
+        builder.get_resource_mut::<DialogMessages>().add(
+            Message::new(
+                "Cameron".to_owned(), 
+                PrettyString::default()
+                    .add("I am looking for this ")
+                    .add(("thing", vec![Attribute::Color(Color::BLUE)]))
+            )
+        );
         builder.pipe(town::collisions)
     }
 }
