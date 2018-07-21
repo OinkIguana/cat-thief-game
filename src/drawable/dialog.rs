@@ -42,9 +42,25 @@ impl Drawable for DialogDrawable {
             let size = canvas.size();
             canvas.set_transform(Rect::from(Point::default(), size), Rect::from(Point::default(), size));
             canvas.set_color(Color::WHITE);
+            canvas.set_font(DEFAULT_FONT);
             canvas.draw_rect_filled(Rect::new(0, (size.height - BOX_HEIGHT) as i32, size.width, BOX_HEIGHT))?;
             canvas.set_color(Color::BLACK);
             canvas.draw_rect(Rect::new(0, (size.height - BOX_HEIGHT) as i32, size.width, 1))?;
+
+            if let Some(speaker) = message.speaker().to_owned() {
+                let Dimen { width, height } = canvas.measure_text(speaker.clone())?;
+                canvas.set_color(Color::WHITE);
+                let speaker_box = Rect::new(
+                    H_PADDING, 
+                    (size.height as i32 - BOX_HEIGHT as i32 - 2 * V_PADDING - height as i32) as i32, 
+                    width + 2 * H_PADDING as u32, 
+                    2 * V_PADDING as u32 + height,
+                );
+                canvas.draw_rect_filled(speaker_box)?;
+                canvas.set_color(Color::BLACK);
+                canvas.draw_rect(speaker_box)?;
+                canvas.draw_text(Point::new(speaker_box.x + H_PADDING, speaker_box.y + V_PADDING), speaker)?;
+            }
 
             let max_width = size.width - 2 * H_PADDING as u32;
 
@@ -65,7 +81,7 @@ impl Drawable for DialogDrawable {
                 .flat_map(|(text, attributes)| {
                     let lines: Vec<_> = text.split("\n").collect();
                     let len = lines.len();
-                    lines 
+                    lines
                         .iter()
                         .enumerate()
                         .map(move |(i, line)| (line.to_string(), attributes.clone(), i != len - 1))
