@@ -33,3 +33,9 @@ impl Message {
         self.message.len()
     }
 }
+
+impl<'a> From<&'a str> for Message {
+    fn from(string: &'a str) -> Self {
+        Message::anon(string)
+    }
+}

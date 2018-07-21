@@ -1,6 +1,6 @@
 use engine::prelude::*;
 
-#[derive(Clone, Eq, PartialEq, Debug)]
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum Attribute {
     Font(&'static Font),
     Color(Color),

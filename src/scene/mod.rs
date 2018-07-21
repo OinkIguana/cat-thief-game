@@ -2,16 +2,21 @@ use engine::prelude::*;
 
 use constant::TILE_SIZE;
 use system::{
-    player::movement::PlayerMovement,
+    player::{
+        dialog_control::DialogControl,
+        movement::PlayerMovement,
+    },
     basic::{
         apply_velocity::ApplyVelocity,
         camera_target::CameraTarget,
     },
     drawable::{
         sprite::MaintainSpriteDrawable,
+        dialog::MaintainDialogDrawable,
     },
     animations::AnimateWalkCycle,
 };
+use resource::dialog_messages::DialogMessages;
 use entity::{
     meta::Dialog,
     player::Player,
@@ -30,6 +35,8 @@ scene! {
             (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
             (AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"]),
             (MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"]),
+            (DialogControl::default(), "DialogControl", &[]),
+            (MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"]),
         ]
     } => |builder| {
         {
@@ -41,6 +48,7 @@ scene! {
             layers.set(-1, town::DOORS.clone());
             layers.set(1, town::ROOFS.clone());
         }
+        builder.get_resource_mut::<DialogMessages>().add("Hello ths is a message");
         builder.pipe(town::collisions)
     }
 }

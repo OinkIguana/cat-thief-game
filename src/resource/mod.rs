@@ -6,9 +6,11 @@ pub mod control_scheme;
 pub mod dialog_messages;
 
 pub fn register(game: Game) -> Game {
-    game.add_resource(constant::BaseMovementSpeed(4))
+    game.add_resource(constant::BaseMovementSpeed::default())
+        .add_resource(constant::DialogSpeed::default())
         .add_resource(control_events::ControlEvents::default())
         .add_resource(control_events::ControlState::default())
         .add_resource(control_scheme::ControlScheme::default())
         .add_resource(dialog_messages::DialogMessages::default())
+        .add_resource(dialog_messages::DialogProgress::default())
 }

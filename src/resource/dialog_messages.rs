@@ -1,8 +1,14 @@
 use std::collections::VecDeque;
 use model::message::Message;
 
-#[derive(Copy, Clone, PartialEq, Default, Debug)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub struct DialogProgress(Option<f32>);
+
+impl Default for DialogProgress {
+    fn default() -> Self {
+        DialogProgress(Some(0f32))
+    }
+}
 
 impl DialogProgress {
     pub fn reset(&mut self) {
@@ -13,9 +19,13 @@ impl DialogProgress {
         self.0 = None;
     }
 
-    pub fn progress(&mut self, amt: f32) {
+    pub fn progress(&mut self, amt: f32, limit: usize) {
         if let Some(prev) = self.0 {
-            self.0 = Some(prev + amt);
+            if (prev + amt) as usize >= limit {
+                self.0 = None;
+            } else {
+                self.0 = Some(prev + amt);
+            }
         }
     }
 
@@ -40,5 +50,9 @@ impl DialogMessages {
 
     pub fn dismiss(&mut self) {
         self.messages.pop_front();
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.messages.is_empty()
     }
 }
