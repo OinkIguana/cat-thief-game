@@ -38,8 +38,7 @@ scene! {
         ],
         systems: [
             (DialogControl::default(), "DialogControl", &[]),
-            (ExitDoors::default(), "ExitDoors", &[]),
-            (MoveByMovePath::default(), "MoveByMovePath", &["ExitDoors"]),
+            (MoveByMovePath::default(), "MoveByMovePath", &[]),
             (PlayerMovement::default(), "PlayerMovement", &["DialogControl", "MoveByMovePath"]),
             (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
             (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
@@ -60,7 +59,9 @@ scene! {
             layers.set(1, town::ROOFS.clone());
         }
         builder.get_resource_mut::<DialogMessages>().start(dialog::opening);
-        builder.pipe(town::collisions)
+        builder
+            .pipe(town::collisions)
+            .run_now(ExitDoors::default())
     }
 }
 

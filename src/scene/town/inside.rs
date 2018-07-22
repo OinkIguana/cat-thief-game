@@ -37,8 +37,7 @@ scene! {
         ],
         systems: [
             (DialogControl::default(), "DialogControl", &[]),
-            (ExitDoors::default(), "ExitDoors", &[]),
-            (MoveByMovePath::default(), "MoveByMovePath", &["ExitDoors"]),
+            (MoveByMovePath::default(), "MoveByMovePath", &[]),
             (PlayerMovement::default(), "PlayerMovement", &["DialogControl", "MoveByMovePath"]),
             (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
             (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
@@ -57,7 +56,9 @@ scene! {
             layers.set(1, town_inside::FURNITURE_FOREGROUND.clone());
             layers.set(2, town_inside::FURNITURE_FOREGROUND_2.clone());
         }
-        builder.pipe(town_inside::collisions)
+        builder
+            .pipe(town_inside::collisions)
+            .run_now(ExitDoors::default())
     }
 }
 
