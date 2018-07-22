@@ -41,6 +41,9 @@ struct Line {
     segments: Vec<Segment>,
 }
 
+// This will be ok because there should only ever be ONE DialogDrawable at one time, and even if
+// there are multiple of them, Drawables are all handled sequentially, so they should not cause
+// simultaneous access here.
 static mut CALCULATED_LINES: Option<Vec<Line>> = None;
 static mut PREVIOUS_MESSAGE: Option<Message> = None;
 
