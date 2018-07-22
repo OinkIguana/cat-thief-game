@@ -23,25 +23,6 @@ impl PrettyString {
         self
     }
 
-    pub fn up_to(&self, max_len: usize) -> PrettyString {
-        let mut output = PrettyString::new();
-        let mut total_len = 0;
-        for segment in &self.0 {
-            let len = segment.0.len();
-            if total_len + len <= max_len {
-                output = output.add(segment.clone());
-                total_len += len;
-                if total_len == max_len {
-                    return output;
-                }
-            } else {
-                let substr = segment.0[..max_len - total_len].to_owned();
-                return output.add((substr, segment.1.clone()));
-            }
-        }
-        return output;
-    }
-
     pub fn len(&self) -> usize {
         self.0
             .iter()

@@ -14,4 +14,7 @@ message = "Shit. I gotta run."
 
 [[messages]]
 speaker = "???"
-message = "Better head for the {blue:back alley} over there."
+message = """
+Better head for the {blue:back alley} over there.
+Maybe I'll get away in there
+"""
