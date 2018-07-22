@@ -1,25 +1,10 @@
 use engine::prelude::*;
-use std::collections::VecDeque;
 
-#[derive(Clone, Default, Debug)]
-pub struct MovePath(VecDeque<Point>);
+mod move_path;
+pub use self::{
+    move_path::MovePath,
+};
 
-impl MovePath {
-    pub fn new(point: Point) -> Self {
-        let mut path = MovePath::default();
-        path.add(point);
-        path
-    }
-
-    pub fn next(&self) -> Point {
-        self.0[0]
-    }
-
-    pub fn add(&mut self, point: Point) {
-        self.0.push_back(point);
-    }
-
-    pub fn arrive(&mut self) {
-        self.0.pop_front();
-    }
+pub(super) fn register(game: Game) -> Game {
+    game.register_component::<MovePath>()
 }

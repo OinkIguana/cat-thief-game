@@ -1,7 +1,7 @@
 use model::direction::Direction;
 use component::{
     marker,
-    graphics::{SpriteFrame, DrawDepth, AnimationSpeed, WalkCycle},
+    graphics::{SpriteFrame, SpriteOrigin, DrawDepth, AnimationSpeed, WalkCycle},
     position::{Position, PreviousPosition},
     velocity::Velocity,
     collision_box::CollisionBox,
@@ -17,10 +17,11 @@ entity! {
         Position::new(x, y),
         PreviousPosition::default(),
         Velocity::default(),
-        CollisionBox::new(16, 32, 32, 32),
+        CollisionBox::new(0, 0, 32, 32),
         SpriteFrame::new(18),
         DrawDepth::new(0),
         SpriteDrawable::boxed(vec![&MALE_WALKCYCLE, &MALE_PANTS]),
+        SpriteOrigin::new(16, 32),
         AnimationSpeed::new(0.5),
         WalkCycle::new([
             (Direction::from_deg(270f64), 0..9),

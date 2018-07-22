@@ -32,5 +32,5 @@ fn main() -> engine::Result<()> {
         .pipe(component::register)
         .pipe(resource::register)
         .pipe(plugin::register)
-        .start(scene::START)
+        .start(scene::town::outside::TOWN_OUTSIDE)
 }

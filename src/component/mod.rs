@@ -2,8 +2,9 @@ use engine::prelude::*;
 
 pub mod behavior;
 pub mod graphics;
-pub mod collision_box;
 pub mod marker;
+pub mod collision_box;
+pub mod door;
 pub mod position;
 pub mod velocity;
 
@@ -12,6 +13,10 @@ pub fn register(game: Game) -> Game {
         .register_component::<position::PreviousPosition>()
         .register_component::<collision_box::CollisionBox>()
         .register_component::<velocity::Velocity>()
+        .register_component::<door::DoorID>()
+        .register_component::<door::TargetScene>()
+        .register_component::<door::DoorExit>()
         .pipe(graphics::register)
         .pipe(marker::register)
+        .pipe(behavior::register)
 }

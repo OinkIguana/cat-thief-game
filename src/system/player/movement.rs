@@ -1,5 +1,6 @@
 use engine::prelude::*;
 use component::{
+    behavior::MovePath,
     marker::Player,
     velocity::Velocity,
 };
@@ -16,7 +17,9 @@ system! {
     impl PlayerMovement {
         fn run(
             &mut self,
+            entities: &Entities,
             velocity: &mut Component<Velocity>,
+            move_path: &Component<MovePath>,
             player: &Component<Player>,
             control_state: &Resource<ControlState>,
             base_movement_speed: &Resource<BaseMovementSpeed>,
@@ -30,7 +33,11 @@ system! {
             let hspeed = axis_h / scale * movement_speed;
             let vspeed = axis_v / scale * movement_speed;
 
-            for (_, mut velocity) in (&player, &mut velocity).join() {
+            for (entity, _, mut velocity) in (&*entities, &player, &mut velocity).join() {
+                if move_path.get(entity).map(|p| !p.is_empty()).unwrap_or(false) {
+                    // can't move if the move_path is overriding
+                    continue;
+                }
                 if dialog_messages.current().is_some() {
                     // disable player control while dialog is visible
                     velocity.0 = Point::default();

@@ -4,6 +4,7 @@ pub mod constant;
 pub mod control_events;
 pub mod control_scheme;
 pub mod dialog_messages;
+pub mod door_transition;
 
 pub fn register(game: Game) -> Game {
     game.add_resource(constant::BaseMovementSpeed::default())
@@ -13,4 +14,5 @@ pub fn register(game: Game) -> Game {
         .add_resource(control_scheme::ControlScheme::default())
         .add_resource(dialog_messages::DialogMessages::default())
         .add_resource(dialog_messages::DialogProgress::default())
+        .add_resource(door_transition::DoorTransition::new("shop"))
 }

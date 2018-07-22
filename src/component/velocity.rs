@@ -9,6 +9,12 @@ impl Velocity {
         Velocity(Point::new(x, y))
     }
 
+    pub fn angular(magnitude: f32, direction: Direction) -> Self {
+        let magnitude = magnitude;
+        let (sin, cos) = direction.rad().sin_cos();
+        Velocity::new(magnitude * cos as f32, magnitude * sin as f32)
+    }
+
     pub fn magnitude(&self) -> f32 {
         (self.0.x.powi(2) + self.0.y.powi(2)).sqrt()
     }

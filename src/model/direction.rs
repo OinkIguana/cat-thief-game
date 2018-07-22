@@ -15,6 +15,11 @@ const fn rad_to_deg(rad: f64) -> f64 {
 }
 
 impl Direction {
+    pub const RIGHT: Direction = Direction { rad: 0f64 };
+    pub const DOWN: Direction = Direction { rad: PI / 4f64 * 3f64 };
+    pub const LEFT: Direction = Direction { rad: PI / 2f64 };
+    pub const UP: Direction = Direction { rad: PI / 4f64 };
+
     pub fn from_rad(mut rad: f64) -> Self {
         while rad < 0f64 {
             rad += PI * 2f64;
