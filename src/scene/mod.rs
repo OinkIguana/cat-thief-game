@@ -21,6 +21,8 @@ use entity::{
     player::Player,
 };
 use tile_grid::town;
+use resource::dialog_messages::DialogMessages;
+use dialog;
 
 scene! {
     pub START {
@@ -29,12 +31,12 @@ scene! {
             Player(TILE_SIZE * 20 + TILE_SIZE / 2, 10 * TILE_SIZE),
         ],
         systems: [
-            (PlayerMovement::default(), "PlayerMovement", &[]),
+            (DialogControl::default(), "DialogControl", &[]),
+            (PlayerMovement::default(), "PlayerMovement", &["DialogControl"]),
             (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
             (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
             (AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"]),
             (MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"]),
-            (DialogControl::default(), "DialogControl", &[]),
             (MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"]),
         ]
     } => |builder| {
@@ -47,6 +49,7 @@ scene! {
             layers.set(-1, town::DOORS.clone());
             layers.set(1, town::ROOFS.clone());
         }
+        builder.get_resource_mut::<DialogMessages>().start(dialog::opening);
         builder.pipe(town::collisions)
     }
 }

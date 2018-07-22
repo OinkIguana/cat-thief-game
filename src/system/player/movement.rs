@@ -6,6 +6,7 @@ use component::{
 use resource::{
     constant::BaseMovementSpeed,
     control_events::ControlState,
+    dialog_messages::DialogMessages,
 };
 
 #[derive(Default, Debug)]
@@ -19,6 +20,7 @@ system! {
             player: &Component<Player>,
             control_state: &Resource<ControlState>,
             base_movement_speed: &Resource<BaseMovementSpeed>,
+            dialog_messages: &Resource<DialogMessages>,
         ) {
             let axis_h = control_state.axis_h as f32;
             let axis_v = control_state.axis_v as f32;
@@ -29,7 +31,12 @@ system! {
             let vspeed = axis_v / scale * movement_speed;
 
             for (_, mut velocity) in (&player, &mut velocity).join() {
-                velocity.0 = Point::new(hspeed, vspeed);
+                if dialog_messages.current().is_some() {
+                    // disable player control while dialog is visible
+                    velocity.0 = Point::default();
+                } else {
+                    velocity.0 = Point::new(hspeed, vspeed);
+                }
             }
         }
     }

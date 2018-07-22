@@ -11,6 +11,7 @@ extern crate specs;
 
 mod component;
 mod constant;
+mod dialog;
 mod drawable;
 mod entity;
 mod font;

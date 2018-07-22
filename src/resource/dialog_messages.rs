@@ -40,6 +40,10 @@ pub struct DialogMessages {
 }
 
 impl DialogMessages {
+    pub fn start<F: Fn(&mut DialogMessages)>(&mut self, f: F) {
+        f(self);
+    }
+
     pub fn add(&mut self, message: impl Into<Message>) {
         self.messages.push_back(message.into());
     }

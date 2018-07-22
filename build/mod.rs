@@ -1,3 +1,5 @@
+#![feature(generators, generator_trait)]
+
 extern crate toml;
 extern crate serde;
 #[macro_use] extern crate serde_derive;
@@ -15,6 +17,7 @@ mod sprite;
 mod font;
 mod tile_set;
 mod tile_grid;
+mod dialog;
 
 use self::{
     image::*,
@@ -22,6 +25,7 @@ use self::{
     font::*,
     tile_set::*,
     tile_grid::*,
+    dialog::*,
 };
 
 // Generates the images, sprites, and fonts modules
@@ -54,4 +58,9 @@ fn main() {
     let tile_grids_out_path = dest_path.join("tile_grids.rs");
     let mut tile_grids_out_file = File::create(tile_grids_out_path).unwrap();
     write_tile_grids(&mut tile_grids_out_file, fs::read_dir(tile_grids_dir).unwrap());
+
+    let dialogs_dir = resources_dir.join("dialog");
+    let dialogs_out_path = dest_path.join("dialogs.rs");
+    let mut dialogs_out_file = File::create(dialogs_out_path).unwrap();
+    write_dialogs(&mut dialogs_out_file, fs::read_dir(dialogs_dir).unwrap());
 }

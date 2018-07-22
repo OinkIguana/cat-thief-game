@@ -150,3 +150,27 @@ pub struct TiledTMXData {
     #[serde(rename = "$value")]
     pub value: String,
 }
+
+#[derive(Deserialize)]
+pub struct DialogSpec {
+    pub rules: Vec<Rule>,
+    pub messages: Vec<Message>,
+}
+
+#[derive(Deserialize)]
+pub struct Rule {
+    pub name: String,
+    pub attributes: Vec<Attribute>,
+}
+
+#[derive(Clone, Deserialize)]
+pub struct Attribute {
+    pub name: String,
+    pub value: String,
+}
+
+#[derive(Deserialize)]
+pub struct Message {
+    pub speaker: Option<String>,
+    pub message: String,
+}
