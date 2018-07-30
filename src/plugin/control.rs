@@ -5,18 +5,22 @@ use resource::{
 };
 
 pub fn process_control_events(world: &mut World) {
+    let mut control_events = world.write_resource::<ControlEvents>();
+    let mut control_state = world.write_resource::<ControlState>();
+
+    control_events.clear();
+    control_state.axis_h = 0;
+    control_state.axis_v = 0;
+
+    if world.read_resource::<IsLoading>().0 {
+        return;
+    }
+
     let control_scheme = world.read_resource::<ControlScheme>();
     let keyboard_events = world.read_resource::<KeyboardEvents>();
     let keyboard_state = world.read_resource::<KeyboardState>();
     let mouse_events = world.read_resource::<MouseEvents>();
     let mouse_state = world.read_resource::<MouseState>();
-    let mut control_events = world.write_resource::<ControlEvents>();
-    let mut control_state = world.write_resource::<ControlState>();
-
-    control_events.clear();
-
-    control_state.axis_h = 0;
-    control_state.axis_v = 0;
 
     match control_scheme.dir_left {
         Control::Key(key) => {
