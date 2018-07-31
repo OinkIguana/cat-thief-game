@@ -24,9 +24,9 @@ pub fn write_tile_grids<'a, W: Write>(file: &mut W, paths: ReadDir) {
             let toml_str = fs::read_to_string(&path).unwrap();
             let tile_grid: TileGridSpec = from_str(&toml_str).unwrap();
             writeln!(
-                file, 
-                "lazy_static! {{ pub static ref {}: TileGrid = TileGrid::new({}, {}, vec![{}]); }}", 
-                const_name, 
+                file,
+                "lazy_static! {{ pub static ref {}: TileGrid = TileGrid::new({}, {}, vec![{}]); }}",
+                const_name,
                 tile_grid.offset.unwrap_or(Point { x: 0, y: 0 }),
                 tile_grid.size,
                 tile_grid
@@ -52,7 +52,7 @@ pub fn write_tile_grids<'a, W: Write>(file: &mut W, paths: ReadDir) {
             for layer in &tile_grid.layers {
                 let const_name = layer.name.to_uppercase();
                 if const_name == "COLLISIONS" {
-                    writeln!(file, "pub fn collisions<'a, 'b, 'c>(builder: SceneBuilder<'a, 'b, 'c>) -> SceneBuilder<'a, 'b, 'c> {{").unwrap();
+                    writeln!(file, "pub fn collisions<'a>(builder: SceneBuilder<'a>) -> SceneBuilder<'a> {{").unwrap();
                     writeln!(file, "builder").unwrap();
                     for (index, tile) in layer.tiles.iter().enumerate() {
                         if *tile != 0 {
@@ -66,17 +66,17 @@ pub fn write_tile_grids<'a, W: Write>(file: &mut W, paths: ReadDir) {
                     writeln!(file, "}}").unwrap();
                 } else {
                     writeln!(
-                        file, 
-                        "lazy_static! {{ pub static ref {}: TileGrid = TileGrid::new({}, {}, vec![{}]); }}", 
-                        const_name, 
+                        file,
+                        "lazy_static! {{ pub static ref {}: TileGrid = TileGrid::new({}, {}, vec![{}]); }}",
+                        const_name,
                         Point { x: 0, y: 0 },
                         Dimen { width: tile_grid.width, height: tile_grid.height },
                         layer.tiles
                             .iter()
                             .map(|index| {
-                                if *index == 0 { 
-                                    "None".to_owned() 
-                                } else { 
+                                if *index == 0 {
+                                    "None".to_owned()
+                                } else {
                                     let set = tile_grid
                                         .tilesets
                                         .iter()

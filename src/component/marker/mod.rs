@@ -5,7 +5,7 @@ pub use self::{
     basic::*,
 };
 
-pub(super) fn register(game: Game) -> Game {
+pub(super) fn register<'a, 'b>(game: Game<'a, 'b>) -> Game<'a, 'b> {
     game.register_component::<Player>()
         .register_component::<Solid>()
         .register_component::<CameraTarget>()

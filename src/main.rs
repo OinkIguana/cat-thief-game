@@ -27,10 +27,49 @@ mod tile_set;
 
 use engine::prelude::*;
 
+use system::{
+    behaviors::{
+        move_path::MoveByMovePath,
+        doors::EnterDoors,
+    },
+    player::{
+        dialog_control::DialogControl,
+        movement::PlayerMovement,
+    },
+    basic::{
+        apply_velocity::ApplyVelocity,
+        camera_target::CameraTarget,
+    },
+    drawable::{
+        sprite::MaintainSpriteDrawable,
+        dialog::MaintainDialogDrawable,
+    },
+    animations::AnimateWalkCycle,
+};
+
 fn main() -> engine::Result<()> {
     Game::new()
         .pipe(component::register)
         .pipe(resource::register)
         .pipe(plugin::register)
+
+        .add_conditional_dispatcher(|world| world.read_resource::<IsLoading>().0, |builder|
+            builder.build()
+        )
+
+        .add_conditional_dispatcher(|world| !world.read_resource::<IsLoading>().0, |builder|
+            builder
+                .with(DialogControl::default(), "DialogControl", &[])
+                .with(MoveByMovePath::default(), "MoveByMovePath", &[])
+                .with(PlayerMovement::default(), "PlayerMovement", &["DialogControl", "MoveByMovePath"])
+                .with(ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"])
+                .with(CameraTarget::default(), "CameraTarget", &["ApplyVelocity"])
+                .with(AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"])
+                .with(EnterDoors::default(), "EnterDoors", &["ApplyVelocity"])
+                .with(MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"])
+                .with(MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"])
+                .build()
+        )
+
         .start(scene::town::outside::TOWN_OUTSIDE)
 }

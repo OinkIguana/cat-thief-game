@@ -12,7 +12,7 @@ pub use self::{
     walk_cycle::WalkCycle,
 };
 
-pub(super) fn register(game: Game) -> Game {
+pub(super) fn register<'a, 'b>(game: Game<'a, 'b>) -> Game<'a, 'b> {
     game.register_component::<SpriteFrame>()
         .register_component::<SpriteOrigin>()
         .register_component::<DrawDepth>()

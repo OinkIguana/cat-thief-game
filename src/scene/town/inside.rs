@@ -1,30 +1,12 @@
 use engine::prelude::*;
 
 use constant::TILE_SIZE;
-use system::{
-    behaviors::{
-        move_path::MoveByMovePath,
-        doors::{EnterDoors, ExitDoors},
-    },
-    player::{
-        dialog_control::DialogControl,
-        movement::PlayerMovement,
-    },
-    basic::{
-        apply_velocity::ApplyVelocity,
-        camera_target::CameraTarget,
-    },
-    drawable::{
-        sprite::MaintainSpriteDrawable,
-        dialog::MaintainDialogDrawable,
-    },
-    animations::AnimateWalkCycle,
-};
 use entity::{
     meta::Dialog,
     door::Door,
 };
 use tile_grid::town_inside;
+use system::behaviors::doors::ExitDoors;
 
 use super::outside::TOWN_OUTSIDE;
 
@@ -34,17 +16,6 @@ scene! {
             Dialog,
             Door("house_4", TOWN_OUTSIDE, TILE_SIZE * 18, TILE_SIZE * 6, TILE_SIZE as u32, TILE_SIZE as u32 / 2, 0, TILE_SIZE),
             Door("shop", TOWN_OUTSIDE, TILE_SIZE * 6, TILE_SIZE * 11 + TILE_SIZE / 2, TILE_SIZE as u32, TILE_SIZE as u32, 0, -TILE_SIZE),
-        ],
-        systems: [
-            (DialogControl::default(), "DialogControl", &[]),
-            (MoveByMovePath::default(), "MoveByMovePath", &[]),
-            (PlayerMovement::default(), "PlayerMovement", &["DialogControl", "MoveByMovePath"]),
-            (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
-            (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
-            (AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"]),
-            (EnterDoors::default(), "EnterDoors", &["ApplyVelocity"]),
-            (MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"]),
-            (MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"]),
         ]
     } => |builder| {
         {
@@ -58,8 +29,6 @@ scene! {
         }
         builder
             .pipe(town_inside::collisions)
-            .run_now(ExitDoors::default())
+            .run_now(ExitDoors::default());
     }
 }
-
-

@@ -6,7 +6,7 @@ pub mod control_scheme;
 pub mod dialog_messages;
 pub mod door_transition;
 
-pub fn register(game: Game) -> Game {
+pub fn register<'a, 'b>(game: Game<'a, 'b>) -> Game<'a, 'b> {
     game.add_resource(constant::BaseMovementSpeed::default())
         .add_resource(constant::DialogSpeed::default())
         .add_resource(control_events::ControlEvents::default())

@@ -1,25 +1,6 @@
 use engine::prelude::*;
 
 use constant::TILE_SIZE;
-use system::{
-    behaviors::{
-        move_path::MoveByMovePath,
-        doors::{EnterDoors, ExitDoors},
-    },
-    player::{
-        dialog_control::DialogControl,
-        movement::PlayerMovement,
-    },
-    basic::{
-        apply_velocity::ApplyVelocity,
-        camera_target::CameraTarget,
-    },
-    drawable::{
-        sprite::MaintainSpriteDrawable,
-        dialog::MaintainDialogDrawable,
-    },
-    animations::AnimateWalkCycle,
-};
 use entity::{
     meta::Dialog,
     door::Door,
@@ -27,6 +8,7 @@ use entity::{
 use tile_grid::town;
 use resource::dialog_messages::DialogMessages;
 use dialog;
+use system::behaviors::doors::ExitDoors;
 use super::inside::TOWN_INSIDE;
 
 scene! {
@@ -35,17 +17,6 @@ scene! {
             Dialog,
             Door("house_4", TOWN_INSIDE, TILE_SIZE * 30, TILE_SIZE * 12, TILE_SIZE as u32, TILE_SIZE as u32, 0, -TILE_SIZE),
             Door("shop", TOWN_INSIDE, TILE_SIZE * 14, TILE_SIZE * 2, TILE_SIZE as u32, TILE_SIZE as u32 / 2, 0, TILE_SIZE),
-        ],
-        systems: [
-            (DialogControl::default(), "DialogControl", &[]),
-            (MoveByMovePath::default(), "MoveByMovePath", &[]),
-            (PlayerMovement::default(), "PlayerMovement", &["DialogControl", "MoveByMovePath"]),
-            (ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"]),
-            (CameraTarget::default(), "CameraTarget", &["ApplyVelocity"]),
-            (AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"]),
-            (EnterDoors::default(), "EnterDoors", &["ApplyVelocity"]),
-            (MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"]),
-            (MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"]),
         ]
     } => |builder| {
         {
@@ -61,7 +32,6 @@ scene! {
         builder.get_resource_mut::<DialogMessages>().start(dialog::opening);
         builder
             .pipe(town::collisions)
-            .run_now(ExitDoors::default())
+            .run_now(ExitDoors::default());
     }
 }
-
