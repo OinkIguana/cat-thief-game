@@ -2,7 +2,7 @@ use engine::prelude::*;
 
 use constant::TILE_SIZE;
 use entity::{
-    meta::Dialog,
+    meta::{Dialog, Loading},
     door::Door,
 };
 use tile_grid::town;
@@ -15,6 +15,7 @@ scene! {
     pub TOWN_OUTSIDE {
         entities: [
             Dialog,
+            Loading,
             Door("house_4", TOWN_INSIDE, TILE_SIZE * 30, TILE_SIZE * 12, TILE_SIZE as u32, TILE_SIZE as u32, 0, -TILE_SIZE),
             Door("shop", TOWN_INSIDE, TILE_SIZE * 14, TILE_SIZE * 2, TILE_SIZE as u32, TILE_SIZE as u32 / 2, 0, TILE_SIZE),
         ]

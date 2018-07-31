@@ -1,9 +1,9 @@
 //! Meta entities, for things like the dialog system which needs to draw things but is really just
 //! a system and some resources
-use drawable::DialogDrawable;
+mod dialog;
+mod loading;
 
-entity! {
-    pub Dialog {
-        DialogDrawable::boxed(),
-    }
-}
+pub use self::{
+    dialog::*,
+    loading::*,
+};

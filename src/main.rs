@@ -1,4 +1,4 @@
-#![feature(macro_at_most_once_rep, range_contains, const_fn)]
+#![feature(macro_at_most_once_rep, range_contains, const_fn, pattern_parentheses)]
 #![deny(bare_trait_objects)]
 #![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
 
@@ -39,10 +39,12 @@ use system::{
     basic::{
         apply_velocity::ApplyVelocity,
         camera_target::CameraTarget,
+        loader::{HideLoader, ShowLoader},
     },
     drawable::{
         sprite::MaintainSpriteDrawable,
         dialog::MaintainDialogDrawable,
+        loading::MaintainLoadingDrawable,
     },
     animations::AnimateWalkCycle,
 };
@@ -54,11 +56,15 @@ fn main() -> engine::Result<()> {
         .pipe(plugin::register)
 
         .add_conditional_dispatcher(|world| world.read_resource::<IsLoading>().0, |builder|
-            builder.build()
+            builder
+                .with(ShowLoader::default(), "ShowLoader", &[])
+                .with(MaintainLoadingDrawable::default(), "MaintainLoadingDrawable", &[])
+                .build()
         )
 
         .add_conditional_dispatcher(|world| !world.read_resource::<IsLoading>().0, |builder|
             builder
+                .with(HideLoader::default(), "HideLoader", &[])
                 .with(DialogControl::default(), "DialogControl", &[])
                 .with(MoveByMovePath::default(), "MoveByMovePath", &[])
                 .with(PlayerMovement::default(), "PlayerMovement", &["DialogControl", "MoveByMovePath"])
@@ -68,6 +74,7 @@ fn main() -> engine::Result<()> {
                 .with(EnterDoors::default(), "EnterDoors", &["ApplyVelocity"])
                 .with(MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"])
                 .with(MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"])
+                .with(MaintainLoadingDrawable::default(), "MaintainLoadingDrawable", &[])
                 .build()
         )
 

@@ -49,7 +49,7 @@ static mut PREVIOUS_MESSAGE: Option<Message> = None;
 
 impl Drawable for DialogDrawable {
     fn depth(&self) -> i32 {
-        ::std::i32::MAX
+        ::std::i32::MAX - 1
     }
 
     fn render(&self, canvas: &mut dyn Canvas) -> engine::Result<()> {

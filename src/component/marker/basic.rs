@@ -4,7 +4,7 @@ use engine::prelude::*;
 #[storage(NullStorage)]
 pub struct Player;
 
-/// Solid entities collision boxes cannot intersect.
+/// Solid entities' collision boxes cannot intersect.
 #[derive(Component, Copy, Clone, Default, Debug)]
 #[storage(NullStorage)]
 pub struct Solid;
@@ -12,3 +12,7 @@ pub struct Solid;
 #[derive(Component, Copy, Clone, Default, Debug)]
 #[storage(NullStorage)]
 pub struct CameraTarget;
+
+#[derive(Component, Copy, Clone, Default, Debug)]
+#[storage(NullStorage)]
+pub struct Loader;
