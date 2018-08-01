@@ -1,23 +1,23 @@
 #![feature(range_contains, const_fn, rust_2018_preview)]
 #![deny(bare_trait_objects)]
 #![warn(rust_2018_idioms)]
-#![allow(dead_code, unreachable_pub)] // while still in early development, there's a lot of stuff unused.
+#![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
 
-mod component;
-mod constant;
-mod dialog;
-mod drawable;
-mod entity;
-mod font;
-mod image;
-mod model;
-mod plugin;
-mod resource;
-mod scene;
-mod sprite;
-mod system;
-mod tile_grid;
-mod tile_set;
+pub mod component;
+pub mod constant;
+pub mod dialog;
+pub mod drawable;
+pub mod entity;
+pub mod font;
+pub mod image;
+pub mod model;
+pub mod plugin;
+pub mod resource;
+pub mod scene;
+pub mod sprite;
+pub mod system;
+pub mod tile_grid;
+pub mod tile_set;
 
 use game_engine::prelude::*;
 

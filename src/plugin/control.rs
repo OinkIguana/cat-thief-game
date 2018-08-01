@@ -4,7 +4,7 @@ use crate::resource::{
     control_scheme::{ControlScheme, Control},
 };
 
-pub fn process_control_events(world: &mut World) {
+pub(super) fn process_control_events(world: &mut World) {
     let mut control_events = world.write_resource::<ControlEvents>();
     let mut control_state = world.write_resource::<ControlState>();
 
