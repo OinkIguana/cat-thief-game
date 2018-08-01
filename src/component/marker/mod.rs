@@ -10,4 +10,5 @@ pub(super) fn register<'a, 'b>(game: Game<'a, 'b>) -> Game<'a, 'b> {
         .register_component::<Loader>()
         .register_component::<Solid>()
         .register_component::<CameraTarget>()
+        .register_component::<Pickup>()
 }

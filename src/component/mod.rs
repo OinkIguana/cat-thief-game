@@ -6,6 +6,7 @@ pub mod marker;
 pub mod collision_box;
 pub mod door;
 pub mod position;
+pub mod state_target;
 pub mod velocity;
 
 pub fn register<'a, 'b>(game: Game<'a, 'b>) -> Game<'a, 'b> {
@@ -16,6 +17,7 @@ pub fn register<'a, 'b>(game: Game<'a, 'b>) -> Game<'a, 'b> {
         .register_component::<door::DoorID>()
         .register_component::<door::TargetScene>()
         .register_component::<door::DoorExit>()
+        .register_component::<state_target::StateTarget>()
         .pipe(graphics::register)
         .pipe(marker::register)
         .pipe(behavior::register)

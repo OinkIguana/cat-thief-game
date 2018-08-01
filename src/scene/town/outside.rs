@@ -6,7 +6,10 @@ use entity::{
     door::Door,
 };
 use tile_grid::town;
-use resource::dialog_messages::DialogMessages;
+use resource::{
+    dialog_messages::DialogMessages,
+    state::{State, MainState},
+};
 use dialog;
 use system::behaviors::doors::ExitDoors;
 use super::inside::TOWN_INSIDE;
@@ -30,7 +33,13 @@ scene! {
             layers.set(-1, town::DOORS.clone());
             layers.set(1, town::ROOFS.clone());
         }
-        builder.get_resource_mut::<DialogMessages>().start(dialog::opening);
+        if builder.get_resource::<State>().main == MainState::Start {
+            builder.get_resource_mut::<DialogMessages>().start(dialog::opening);
+            builder.get_resource_mut::<State>().main = MainState::RunToTheAlley;
+        }
+        if builder.get_resource::<State>().main == MainState::RunToTheAlley {
+            // builder.add_entity();
+        }
         builder
             .pipe(town::collisions)
             .run_now(ExitDoors::default());

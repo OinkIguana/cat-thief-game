@@ -1,4 +1,4 @@
-#![feature(macro_at_most_once_rep, range_contains, const_fn, pattern_parentheses)]
+#![feature(macro_at_most_once_rep, range_contains, const_fn)]
 #![deny(bare_trait_objects)]
 #![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
 
@@ -55,13 +55,6 @@ fn main() -> engine::Result<()> {
         .pipe(resource::register)
         .pipe(plugin::register)
 
-        .add_conditional_dispatcher(|world| world.read_resource::<IsLoading>().0, |builder|
-            builder
-                .with(ShowLoader::default(), "ShowLoader", &[])
-                .with(MaintainLoadingDrawable::default(), "MaintainLoadingDrawable", &[])
-                .build()
-        )
-
         .add_conditional_dispatcher(|world| !world.read_resource::<IsLoading>().0, |builder|
             builder
                 .with(HideLoader::default(), "HideLoader", &[])
@@ -74,6 +67,17 @@ fn main() -> engine::Result<()> {
                 .with(EnterDoors::default(), "EnterDoors", &["ApplyVelocity"])
                 .with(MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"])
                 .with(MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"])
+                .build()
+        )
+
+        .add_conditional_dispatcher(|world| world.read_resource::<IsLoading>().0, |builder|
+            builder
+                .with(ShowLoader::default(), "ShowLoader", &[])
+                .build()
+        )
+
+        .add_dispatcher(|builder|
+            builder
                 .with(MaintainLoadingDrawable::default(), "MaintainLoadingDrawable", &[])
                 .build()
         )

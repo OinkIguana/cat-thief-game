@@ -16,3 +16,7 @@ pub struct CameraTarget;
 #[derive(Component, Copy, Clone, Default, Debug)]
 #[storage(NullStorage)]
 pub struct Loader;
+
+#[derive(Component, Copy, Clone, Default, Debug)]
+#[storage(NullStorage)]
+pub struct Pickup;
