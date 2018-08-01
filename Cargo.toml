@@ -1,7 +1,7 @@
 cargo-features = ["edition"]
 
 [package]
-name = "steampunk-game"
+name = "cat-game"
 version = "0.1.0"
 authors = ["Cameron Eldridge <cameldridge+git@gmail.com>"]
 build = "build/mod.rs"
