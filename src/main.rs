@@ -34,6 +34,7 @@ use crate::system::{
         apply_velocity::ApplyVelocity,
         camera_target::CameraTarget,
         loader::{HideLoader, ShowLoader},
+        state_pickups::StatePickups,
     },
     drawable::{
         sprite::MaintainSpriteDrawable,
@@ -59,6 +60,7 @@ fn main() -> game_engine::Result<()> {
                 .with(CameraTarget::default(), "CameraTarget", &["ApplyVelocity"])
                 .with(AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"])
                 .with(EnterDoors::default(), "EnterDoors", &["ApplyVelocity"])
+                .with(StatePickups::default(), "StatePickups", &["ApplyVelocity"])
                 .with(MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"])
                 .with(MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"])
                 .build()

@@ -5,6 +5,7 @@ use crate::constant::TILE_SIZE;
 use crate::entity::{
     meta::{Dialog, Loading},
     door::Door,
+    state_pickup::StatePickup,
 };
 use crate::tile_grid::town;
 use crate::resource::{
@@ -39,7 +40,7 @@ scene! {
             builder.get_resource_mut::<State>().main = MainState::RunToTheAlley;
         }
         if builder.get_resource::<State>().main == MainState::RunToTheAlley {
-            // builder.add_entity();
+            builder.add_entity(StatePickup(TILE_SIZE * 24, TILE_SIZE * 7, TILE_SIZE as u32, TILE_SIZE as u32, MainState::End));
         }
         builder
             .pipe(town::collisions)

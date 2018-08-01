@@ -52,7 +52,7 @@ pub fn write_tile_grids<'a, W: Write>(file: &mut W, paths: ReadDir) {
             for layer in &tile_grid.layers {
                 let const_name = layer.name.to_uppercase();
                 if const_name == "COLLISIONS" {
-                    writeln!(file, "pub fn collisions<'a>(builder: SceneBuilder<'a>) -> SceneBuilder<'a> {{").unwrap();
+                    writeln!(file, "pub fn collisions<'a>(builder: &mut SceneBuilder<'a>) {{").unwrap();
                     writeln!(file, "builder").unwrap();
                     for (index, tile) in layer.tiles.iter().enumerate() {
                         if *tile != 0 {
@@ -63,7 +63,7 @@ pub fn write_tile_grids<'a, W: Write>(file: &mut W, paths: ReadDir) {
                             writeln!(file, ".add_entity(Wall({}, {}, {}, {}))", x, y, width, height).unwrap();
                         }
                     }
-                    writeln!(file, "}}").unwrap();
+                    writeln!(file, ";}}").unwrap();
                 } else {
                     writeln!(
                         file,
