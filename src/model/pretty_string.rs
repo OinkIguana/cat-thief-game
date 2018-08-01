@@ -1,4 +1,4 @@
-use engine::prelude::*;
+use game_engine::prelude::*;
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum Attribute {

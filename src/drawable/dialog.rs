@@ -1,11 +1,11 @@
 use std::any::Any;
-use engine::{self, prelude::*};
+use game_engine::prelude::*;
 
-use model::{
+use crate::model::{
     message::Message,
     pretty_string::Attribute,
 };
-use font::abyssinica::REGULAR_18 as DEFAULT_FONT;
+use crate::font::abyssinica::REGULAR_18 as DEFAULT_FONT;
 
 #[derive(Default, Debug)]
 pub struct DialogDrawable {
@@ -52,7 +52,7 @@ impl Drawable for DialogDrawable {
         ::std::i32::MAX - 1
     }
 
-    fn render(&self, canvas: &mut dyn Canvas) -> engine::Result<()> {
+    fn render(&self, canvas: &mut dyn Canvas) -> game_engine::Result<()> {
         if let Some(message) = &self.message {
             // draw the dialog box
             let size = canvas.size();
@@ -97,7 +97,7 @@ impl Drawable for DialogDrawable {
                                 .map(move |(i, line)| (line.to_string(), attributes.clone(), i != len - 1))
                                 .collect::<Vec<_>>()
                         })
-                        .fold(Ok(vec![Line::default()]), |lines: engine::Result<Vec<Line>>, (text, attributes, newline)| {
+                        .fold(Ok(vec![Line::default()]), |lines: game_engine::Result<Vec<Line>>, (text, attributes, newline)| {
                             let mut lines = lines?;
                             canvas.set_font(DEFAULT_FONT);
                             for attribute in &attributes {

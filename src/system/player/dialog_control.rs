@@ -1,4 +1,5 @@
-use resource::{
+use game_engine::system;
+use crate::resource::{
     constant::DialogSpeed,
     dialog_messages::{DialogProgress, DialogMessages},
     control_events::{ControlEvents, ControlEvent},
@@ -25,7 +26,7 @@ system! {
             if dialog_messages.current().is_some() {
                 for event in control_events.iter() {
                     match event {
-                        | &ControlEvent::Action(..) 
+                        | &ControlEvent::Action(..)
                         | &ControlEvent::Cancel(..) => {
                             if dialog_progress.current().is_some() {
                                 dialog_progress.skip();

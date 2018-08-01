@@ -1,4 +1,5 @@
-use engine::prelude::*;
+use specs_derive::Component;
+use game_engine::prelude::*;
 use std::collections::VecDeque;
 
 #[derive(Component, Clone, Default, Debug)]

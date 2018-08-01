@@ -1,4 +1,5 @@
-use component::{
+use game_engine::entity;
+use crate::component::{
     collision_box::CollisionBox,
     marker,
 };

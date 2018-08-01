@@ -1,6 +1,6 @@
 //! Input events mapped through the `ControlScheme` for uniform processing.
 
-use engine::prelude::*;
+use game_engine::prelude::*;
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub enum ControlEvent {

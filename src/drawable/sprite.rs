@@ -1,5 +1,5 @@
 use std::any::Any;
-use engine::{self, prelude::*};
+use game_engine::prelude::*;
 
 #[derive(Debug)]
 pub struct SpriteDrawable {
@@ -11,10 +11,10 @@ pub struct SpriteDrawable {
 
 impl SpriteDrawable {
     pub fn boxed(sprites: Vec<&'static Sprite>) -> Box<dyn Drawable> {
-        Box::new(SpriteDrawable { 
+        Box::new(SpriteDrawable {
             depth: 0,
-            position: Point::default(), 
-            frame: 0, 
+            position: Point::default(),
+            frame: 0,
             sprites,
         })
     }
@@ -25,7 +25,7 @@ impl Drawable for SpriteDrawable {
         self.depth
     }
 
-    fn render(&self, canvas: &mut dyn Canvas) -> engine::Result<()> {
+    fn render(&self, canvas: &mut dyn Canvas) -> game_engine::Result<()> {
         for sprite in &self.sprites {
             canvas.draw_sprite(self.position, self.frame, (*sprite).clone())?;
         }

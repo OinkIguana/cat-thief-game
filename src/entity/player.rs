@@ -1,13 +1,14 @@
-use model::direction::Direction;
-use component::{
+use game_engine::entity;
+use crate::model::direction::Direction;
+use crate::component::{
     marker,
     graphics::{SpriteFrame, SpriteOrigin, DrawDepth, AnimationSpeed, WalkCycle},
     position::{Position, PreviousPosition},
     velocity::Velocity,
     collision_box::CollisionBox,
 };
-use drawable::SpriteDrawable;
-use sprite::{MALE_WALKCYCLE, MALE_PANTS};
+use crate::drawable::SpriteDrawable;
+use crate::sprite::{MALE_WALKCYCLE, MALE_PANTS};
 
 entity! {
     pub Player(x: i32, y: i32) {

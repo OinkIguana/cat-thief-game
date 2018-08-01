@@ -1,6 +1,6 @@
 //! Defines a mapping of inputs to controls
 
-use engine::prelude::*;
+use game_engine::prelude::*;
 
 // TODO: these need to be Serialize/Deserialize so that the controls can be saved in a .toml
 //       this will require implementing Serialize/Deserialize for Key

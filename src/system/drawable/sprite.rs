@@ -1,7 +1,6 @@
-use std::any::Any;
-use engine::prelude::*;
-use drawable::SpriteDrawable;
-use component::{
+use game_engine::{system, prelude::*};
+use crate::drawable::SpriteDrawable;
+use crate::component::{
     position::Position,
     graphics::{SpriteFrame, SpriteOrigin, DrawDepth},
 };
@@ -20,8 +19,8 @@ system! {
             sprite_origin: &Component<SpriteOrigin>,
             drawable: &mut Component<Box<dyn Drawable>>,
         ) {
-            for (entity, mut drawable) in (&*entities, &mut drawable).join() {
-                if let Some(drawable) = Any::downcast_mut::<SpriteDrawable>(drawable.as_any_mut()) {
+            for (entity, drawable) in (&*entities, &mut drawable).join() {
+                if let Some(drawable) = drawable.as_any_mut().downcast_mut::<SpriteDrawable>() {
                     if let Some(position) = position.get(entity) {
                         drawable.position = position.rounded();
                     } else {

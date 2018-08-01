@@ -1,8 +1,11 @@
+cargo-features = ["edition"]
+
 [package]
 name = "steampunk-game"
 version = "0.1.0"
 authors = ["Cameron Eldridge <cameldridge+git@gmail.com>"]
 build = "build/mod.rs"
+edition = "2018"
 
 [dependencies]
 game-engine = { path = "../game-engine/rust" }

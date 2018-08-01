@@ -1,7 +1,7 @@
 use std::any::Any;
-use engine::{self, prelude::*};
+use game_engine::prelude::*;
 
-use font::abyssinica::REGULAR_18 as abyssinica;
+use crate::font::abyssinica::REGULAR_18 as abyssinica;
 
 #[derive(Default, Debug)]
 pub struct LoadingDrawable {
@@ -20,7 +20,7 @@ impl Drawable for LoadingDrawable {
         ::std::i32::MAX
     }
 
-    fn render(&self, canvas: &mut dyn Canvas) -> engine::Result<()> {
+    fn render(&self, canvas: &mut dyn Canvas) -> game_engine::Result<()> {
         if !self.visible { return Ok(()); }
 
         let size = canvas.size();

@@ -1,17 +1,18 @@
-use engine::prelude::*;
+use game_engine::scene;
+use game_engine::prelude::*;
 
-use constant::TILE_SIZE;
-use entity::{
+use crate::constant::TILE_SIZE;
+use crate::entity::{
     meta::{Dialog, Loading},
     door::Door,
 };
-use tile_grid::town;
-use resource::{
+use crate::tile_grid::town;
+use crate::resource::{
     dialog_messages::DialogMessages,
     state::{State, MainState},
 };
-use dialog;
-use system::behaviors::doors::ExitDoors;
+use crate::dialog;
+use crate::system::behaviors::doors::ExitDoors;
 use super::inside::TOWN_INSIDE;
 
 scene! {

@@ -1,6 +1,6 @@
-use engine::prelude::*;
+use game_engine::{system, prelude::*};
 
-use component::{
+use crate::component::{
     marker::Solid,
     position::{Position, PreviousPosition},
     velocity::Velocity,
@@ -20,7 +20,7 @@ system! {
             previous_position: &mut Component<PreviousPosition>,
             collision_box: &Component<CollisionBox>,
             solid: &Component<Solid>,
-            ) {
+        ) {
             let collision_boxes: Vec<_> = (&*entities, &collision_box, &solid)
                 .join()
                 .map(|(entity, collision_box, _)| {
@@ -33,8 +33,8 @@ system! {
                 .collect();
             // NOTE: this might be a candidate for par_join, as it is potentially expensive, and
             // probably happening often
-            for (entity, velocity, mut position) in (&*entities, &velocity, &mut position).join() {
-                if let Some(mut previous_position) = previous_position.get_mut(entity) {
+            for (entity, velocity, position) in (&*entities, &velocity, &mut position).join() {
+                if let Some(previous_position) = previous_position.get_mut(entity) {
                     previous_position.0 = position.0;
                 }
                 if velocity.magnitude() == 0f32 {

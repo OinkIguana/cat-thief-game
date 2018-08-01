@@ -1,5 +1,5 @@
-use engine::prelude::*;
-use resource::{
+use game_engine::prelude::*;
+use crate::resource::{
     control_events::{ControlEvent, ControlEvents, ControlState},
     control_scheme::{ControlScheme, Control},
 };

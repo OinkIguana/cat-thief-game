@@ -1,5 +1,6 @@
-use engine::prelude::*;
-use model::direction::Direction;
+use specs_derive::Component;
+use game_engine::prelude::*;
+use crate::model::direction::Direction;
 
 #[derive(Component, Copy, Clone, PartialEq, Default, Debug)]
 pub struct Velocity(pub Point<f32>);

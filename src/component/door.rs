@@ -1,5 +1,6 @@
-use engine::prelude::*;
-use component::behavior::MovePath;
+use specs_derive::Component;
+use game_engine::prelude::*;
+use crate::component::behavior::MovePath;
 
 #[derive(Component, Copy, Clone, Eq, PartialEq, Debug)]
 pub struct DoorID(pub &'static str);

@@ -14,7 +14,7 @@ pub fn write_tile_grids<'a, W: Write>(file: &mut W, paths: ReadDir) {
         let path = path.unwrap().path();
         if path.is_dir() {
             writeln!(file, "pub mod {} {{", path.file_name().unwrap().to_str().unwrap().to_owned().to_lowercase()).unwrap();
-            writeln!(file, "use super::{{tile_set, TileGrid, Tile, Point, Dimen, Wall, SceneBuilder}};").unwrap();
+            writeln!(file, "use super::{{tile_set, TileGrid, Tile, Point, Dimen, Wall, SceneBuilder, lazy_static}};").unwrap();
             let sub_paths = fs::read_dir(path).unwrap();
             write_tile_grids(file, sub_paths);
             writeln!(file, "}}").unwrap();
@@ -48,7 +48,7 @@ pub fn write_tile_grids<'a, W: Write>(file: &mut W, paths: ReadDir) {
             let tiled_grid_spec: TiledTMXSpec = deserialize(&xml_file).unwrap();
             let tile_grid = tiled_grid_spec.resolve();
             writeln!(file, "pub mod {} {{", mod_name).unwrap();
-            writeln!(file, "use super::{{tile_set, TileGrid, Tile, Point, Dimen, Wall, SceneBuilder}};").unwrap();
+            writeln!(file, "use super::{{tile_set, TileGrid, Tile, Point, Dimen, Wall, SceneBuilder, lazy_static}};").unwrap();
             for layer in &tile_grid.layers {
                 let const_name = layer.name.to_uppercase();
                 if const_name == "COLLISIONS" {

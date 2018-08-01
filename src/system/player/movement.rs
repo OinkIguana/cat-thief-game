@@ -1,10 +1,10 @@
-use engine::prelude::*;
-use component::{
+use game_engine::{system, prelude::*};
+use crate::component::{
     behavior::MovePath,
     marker::Player,
     velocity::Velocity,
 };
-use resource::{
+use crate::resource::{
     constant::BaseMovementSpeed,
     control_events::ControlState,
     dialog_messages::DialogMessages,
@@ -33,7 +33,7 @@ system! {
             let hspeed = axis_h / scale * movement_speed;
             let vspeed = axis_v / scale * movement_speed;
 
-            for (entity, _, mut velocity) in (&*entities, &player, &mut velocity).join() {
+            for (entity, _, velocity) in (&*entities, &player, &mut velocity).join() {
                 if move_path.get(entity).map(|p| !p.is_empty()).unwrap_or(false) {
                     // can't move if the move_path is overriding
                     continue;

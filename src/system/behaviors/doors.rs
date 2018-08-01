@@ -1,13 +1,13 @@
-use engine::prelude::*;
-use component::{
+use game_engine::{system, prelude::*};
+use crate::component::{
     marker,
     position::Position,
     collision_box::CollisionBox,
     behavior::MovePath,
     door::*,
 };
-use resource::door_transition::DoorTransition;
-use entity::player::Player;
+use crate::resource::door_transition::DoorTransition;
+use crate::entity::player::Player;
 
 #[derive(Default, Debug)]
 pub struct EnterDoors;

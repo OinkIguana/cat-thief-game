@@ -1,4 +1,4 @@
-use engine::prelude::*;
+use game_engine::prelude::*;
 
 mod move_path;
 pub use self::{

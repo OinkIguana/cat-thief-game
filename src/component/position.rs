@@ -1,4 +1,5 @@
-use engine::prelude::*;
+use specs_derive::Component;
+use game_engine::prelude::*;
 
 #[derive(Component, Copy, Clone, PartialEq, Default, Debug)]
 pub struct Position(pub Point<f32>);

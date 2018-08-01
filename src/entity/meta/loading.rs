@@ -1,5 +1,6 @@
-use drawable::LoadingDrawable;
-use component::{
+use game_engine::entity;
+use crate::drawable::LoadingDrawable;
+use crate::component::{
     marker::Loader,
     graphics::Visible,
 };

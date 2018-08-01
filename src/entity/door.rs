@@ -1,5 +1,6 @@
-use engine::prelude::*;
-use component::{
+use game_engine::entity;
+use game_engine::prelude::*;
+use crate::component::{
     position::Position,
     collision_box::CollisionBox,
     door::{DoorID, TargetScene, DoorExit},
@@ -7,12 +8,12 @@ use component::{
 
 entity! {
     pub Door(
-        name: &'static str, 
+        name: &'static str,
         scene: &'static dyn Scene,
-        x: i32, 
-        y: i32, 
-        width: u32, 
-        height: u32, 
+        x: i32,
+        y: i32,
+        width: u32,
+        height: u32,
         exit_x: i32,
         exit_y: i32,
     ) {

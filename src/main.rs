@@ -1,13 +1,7 @@
-#![feature(macro_at_most_once_rep, range_contains, const_fn)]
+#![feature(range_contains, const_fn, rust_2018_preview)]
 #![deny(bare_trait_objects)]
-#![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
-
-#[macro_use] extern crate game_engine as engine;
-#[macro_use] extern crate serde_derive;
-extern crate serde;
-extern crate specs;
-#[macro_use] extern crate specs_derive;
-#[macro_use] extern crate lazy_static;
+#![warn(rust_2018_idioms)]
+#![allow(dead_code, unreachable_pub)] // while still in early development, there's a lot of stuff unused.
 
 mod component;
 mod constant;
@@ -25,9 +19,9 @@ mod system;
 mod tile_grid;
 mod tile_set;
 
-use engine::prelude::*;
+use game_engine::prelude::*;
 
-use system::{
+use crate::system::{
     behaviors::{
         move_path::MoveByMovePath,
         doors::EnterDoors,
@@ -49,7 +43,7 @@ use system::{
     animations::AnimateWalkCycle,
 };
 
-fn main() -> engine::Result<()> {
+fn main() -> game_engine::Result<()> {
     Game::new()
         .pipe(component::register)
         .pipe(resource::register)

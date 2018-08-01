@@ -1,4 +1,4 @@
-use engine::prelude::*;
+use game_engine::prelude::*;
 
 pub mod constant;
 pub mod control_events;

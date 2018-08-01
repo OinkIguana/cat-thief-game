@@ -1,4 +1,4 @@
-use component::door::DoorID;
+use crate::component::door::DoorID;
 
 #[derive(Copy, Clone, Default, Debug)]
 pub struct DoorTransition(Option<DoorID>);

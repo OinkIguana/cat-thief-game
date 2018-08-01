@@ -1,5 +1,5 @@
-use engine::prelude::*;
-use component::{
+use game_engine::{system, prelude::*};
+use crate::component::{
     graphics::{SpriteFrame, WalkCycle, AnimationSpeed},
     velocity::Velocity,
     position::{Position, PreviousPosition},
@@ -28,9 +28,9 @@ system! {
             animation_speed: &Component<AnimationSpeed>,
             sprite_frame: &mut Component<SpriteFrame>,
         ) {
-            for (entity, walk_cycle, velocity, animation_speed, sprite_frame) in 
+            for (entity, walk_cycle, velocity, animation_speed, sprite_frame) in
                 (&*entities, &walk_cycle, &velocity, &animation_speed, &mut sprite_frame).join() {
-                let image_speed = 
+                let image_speed =
                     if let (Some(position), Some(previous_position)) = (position.get(entity), previous_position.get(entity)) {
                         let delta_pos = position.0 - previous_position.0;
                         if delta_pos == Point::new(0f32, 0f32) {

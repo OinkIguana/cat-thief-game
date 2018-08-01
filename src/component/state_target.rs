@@ -1,5 +1,6 @@
-use engine::prelude::*;
-use resource::state::MainState;
+use specs_derive::Component;
+use game_engine::prelude::*;
+use crate::resource::state::MainState;
 
 #[derive(Component, Copy, Clone, Debug)]
 pub struct StateTarget(pub MainState);

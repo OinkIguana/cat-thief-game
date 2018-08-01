@@ -1,4 +1,4 @@
-use engine::Game;
+use game_engine::Game;
 
 mod animation_speed;
 mod draw_depth;

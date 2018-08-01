@@ -1,5 +1,6 @@
-use resource::state::MainState;
-use component::{
+use game_engine::entity;
+use crate::resource::state::MainState;
+use crate::component::{
     collision_box::CollisionBox,
     state_target::StateTarget,
     marker,

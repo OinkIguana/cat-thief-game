@@ -1,10 +1,11 @@
-use model::direction::Direction;
-use component::{
+use game_engine::system;
+use crate::model::direction::Direction;
+use crate::component::{
     behavior::MovePath,
     position::Position,
     velocity::Velocity,
 };
-use resource::constant::BaseMovementSpeed;
+use crate::resource::constant::BaseMovementSpeed;
 
 #[derive(Default, Debug)]
 pub struct MoveByMovePath;
@@ -18,7 +19,7 @@ system! {
             move_path: &mut Component<MovePath>,
             base_movement_speed: &Resource<BaseMovementSpeed>,
         ) {
-            'entities: for (position, mut move_path, mut velocity) in (&position, &mut move_path, &mut velocity).join() {
+            'entities: for (position, move_path, velocity) in (&position, &mut move_path, &mut velocity).join() {
                 if let Some(mut target) = move_path.target() {
                     while target == position.0 {
                         move_path.arrive();
@@ -35,4 +36,3 @@ system! {
         }
     }
 }
-

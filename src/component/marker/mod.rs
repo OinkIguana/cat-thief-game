@@ -1,4 +1,4 @@
-use engine::prelude::*;
+use game_engine::prelude::*;
 
 mod basic;
 pub use self::{

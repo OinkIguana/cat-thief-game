@@ -1,5 +1,5 @@
 use std::f64::consts::PI;
-use engine::prelude::*;
+use game_engine::prelude::*;
 
 #[derive(Copy, Clone, PartialEq, Default, Debug)]
 pub struct Direction {

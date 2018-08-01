@@ -1,7 +1,8 @@
+use specs_derive::Component;
 use std::ops::Range;
-use engine::prelude::*;
+use game_engine::prelude::*;
 
-use model::direction::Direction;
+use crate::model::direction::Direction;
 
 // NOTE: I feel like `HashMap` has much overhead for something so simple as this. Might be worth
 // looking into `Vec<(Direction, &[Rect])>` implementation.
@@ -20,7 +21,7 @@ impl WalkCycle {
         self.directions
             .iter()
             .fold(None, |best: Option<(Direction, Range<usize>)>, next| {
-                if let Some(best) = best { 
+                if let Some(best) = best {
                     if direction.difference(&next.0) < direction.difference(&best.0) {
                         Some(next.clone())
                     } else {

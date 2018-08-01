@@ -1,5 +1,5 @@
 use std::collections::VecDeque;
-use model::message::Message;
+use crate::model::message::Message;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct DialogProgress(Option<f32>);

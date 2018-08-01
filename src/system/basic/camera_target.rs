@@ -1,6 +1,6 @@
-use engine::prelude::*;
+use game_engine::{system, prelude::*};
 
-use component::{
+use crate::component::{
     marker,
     position::Position,
 };

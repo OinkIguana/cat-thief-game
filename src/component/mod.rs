@@ -1,4 +1,4 @@
-use engine::prelude::*;
+use game_engine::prelude::*;
 
 pub mod behavior;
 pub mod graphics;
