@@ -1,16 +1,17 @@
 use std::any::Any;
 use game_engine::prelude::*;
+use inkgen::runtime::Paragraph;
 
 use crate::model::{
     message::Message,
-    pretty_string::Attribute,
+    pretty_string::Attributes,
 };
 use crate::font::abyssinica::REGULAR_18 as DEFAULT_FONT;
 
 #[derive(Default, Debug)]
 pub struct DialogDrawable {
     pub index: Option<usize>,
-    pub message: Option<Message>,
+    pub paragraph: Option<Paragraph>,
 }
 
 impl DialogDrawable {
@@ -26,7 +27,7 @@ const V_PADDING: i32 = 16;
 #[derive(Clone, Debug)]
 struct Segment {
     text: String,
-    attributes: Vec<Attribute>,
+    attributes: Attributes,
     size: Dimen,
     ascent: i32,
     min_y: i32,
@@ -45,7 +46,7 @@ struct Line {
 // there are multiple of them, Drawables are all handled sequentially, so they should not cause
 // simultaneous access here.
 static mut CALCULATED_LINES: Option<Vec<Line>> = None;
-static mut PREVIOUS_MESSAGE: Option<Message> = None;
+static mut PREVIOUS_MESSAGE: Option<Paragraph> = None;
 
 impl Drawable for DialogDrawable {
     fn depth(&self) -> i32 {
@@ -53,7 +54,9 @@ impl Drawable for DialogDrawable {
     }
 
     fn render(&self, canvas: &mut dyn Canvas) -> game_engine::Result<()> {
-        if let Some(message) = &self.message {
+        if let Some(paragraph) = &self.paragraph {
+            let message = Message::from(paragraph.text());
+
             // draw the dialog box
             let size = canvas.size();
             canvas.set_transform(Rect::from(Point::default(), size), Rect::from(Point::default(), size));
@@ -84,8 +87,8 @@ impl Drawable for DialogDrawable {
             let segments = message.message().clone();
 
             unsafe {
-                if CALCULATED_LINES.is_none() || PREVIOUS_MESSAGE.as_ref() != Some(message) {
-                    PREVIOUS_MESSAGE = Some(message.clone());
+                if CALCULATED_LINES.is_none() || PREVIOUS_MESSAGE.as_ref() != Some(paragraph) {
+                    PREVIOUS_MESSAGE = Some(paragraph.clone());
                     CALCULATED_LINES = Some(segments.0
                         .iter()
                         .flat_map(|(text, attributes)| {
@@ -94,17 +97,14 @@ impl Drawable for DialogDrawable {
                             lines
                                 .iter()
                                 .enumerate()
-                                .map(move |(i, line)| (line.to_string(), attributes.clone(), i != len - 1))
+                                .map(move |(i, line)| (line.to_string(), attributes, i != len - 1))
                                 .collect::<Vec<_>>()
                         })
                         .fold(Ok(vec![Line::default()]), |lines: game_engine::Result<Vec<Line>>, (text, attributes, newline)| {
                             let mut lines = lines?;
                             canvas.set_font(DEFAULT_FONT);
-                            for attribute in &attributes {
-                                match attribute {
-                                    &Attribute::Font(font) => canvas.set_font(*font),
-                                    _ => {},
-                                }
+                            if let Some(font) = attributes.font {
+                                canvas.set_font(*font);
                             }
                             let Dimen { width, height } = canvas.measure_text(text.to_owned())?;
                             if lines.last().unwrap().width + width > max_width {
@@ -133,7 +133,7 @@ impl Drawable for DialogDrawable {
                                         current_line.height = u32::max(current_line.height, height);
                                         current_line.segments.push(Segment {
                                             text: substr.to_string(),
-                                            attributes: attributes.clone(),
+                                            attributes: *attributes,
                                             size: Dimen { width, height },
                                             ascent: canvas.font_ascent()?,
                                             min_y: min_y.unwrap_or(0),
@@ -160,7 +160,7 @@ impl Drawable for DialogDrawable {
                                 current_line.height = u32::max(current_line.height, height);
                                 current_line.segments.push(Segment {
                                     text,
-                                    attributes,
+                                    attributes: *attributes,
                                     size: Dimen { width, height },
                                     ascent: canvas.font_ascent()?,
                                     min_y: min_y.unwrap_or(0),
@@ -179,7 +179,7 @@ impl Drawable for DialogDrawable {
                 let mut printed = 0usize;
                 'done: for line in lines {
                     let mut x = H_PADDING;
-                    for &Segment { ref text, ref attributes, size: Dimen { width, .. }, ascent, max_y, .. } in &line.segments {
+                    for &Segment { ref text, attributes, size: Dimen { width, .. }, ascent, max_y, .. } in &line.segments {
                         if text.is_empty() { break; }
                         let to_print =
                             if self.index.is_some() && printed + text.len() > self.index.unwrap() {
@@ -190,11 +190,11 @@ impl Drawable for DialogDrawable {
                         printed += to_print.len();
                         canvas.set_font(DEFAULT_FONT);
                         canvas.set_color(Color::BLACK);
-                        for attribute in attributes {
-                            match attribute {
-                                &Attribute::Color(color) => canvas.set_color(color),
-                                &Attribute::Font(font) => canvas.set_font(*font),
-                            }
+                        if let Some(color) = attributes.color {
+                            canvas.set_color(color);
+                        }
+                        if let Some(font) = attributes.font {
+                            canvas.set_font(*font);
                         }
                         canvas.draw_text(Point::new(x, y + ascent - max_y), to_print.to_string())?;
                         x += width as i32;

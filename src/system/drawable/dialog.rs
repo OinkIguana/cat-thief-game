@@ -16,7 +16,7 @@ system! {
             for drawable in (&mut drawable).join() {
                 if let Some(drawable) = drawable.as_any_mut().downcast_mut::<DialogDrawable>() {
                     drawable.index = dialog_progress.current();
-                    drawable.message = dialog_messages.current().cloned();
+                    drawable.paragraph = dialog_messages.current().cloned();
                 }
             }
         }

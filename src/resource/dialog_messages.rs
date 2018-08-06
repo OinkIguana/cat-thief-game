@@ -1,5 +1,5 @@
-use std::collections::VecDeque;
-use crate::model::message::Message;
+use std::sync::Mutex;
+use inkgen::runtime::{Story, Paragraph};
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct DialogProgress(Option<f32>);
@@ -34,29 +34,49 @@ impl DialogProgress {
     }
 }
 
-#[derive(Clone, Default, Debug)]
+#[derive(Default, Debug)]
 pub struct DialogMessages {
-    messages: VecDeque<Message>,
+    story: Mutex<Option<Story>>,
+    paragraph: Option<Paragraph>
 }
 
 impl DialogMessages {
-    pub fn start<F: Fn(&mut DialogMessages)>(&mut self, f: F) {
-        f(self);
+    pub fn start(&mut self, story: Story) {
+        if let Some((paragraph, story)) = unsafe { story.next() } {
+            self.paragraph = Some(paragraph);
+            *self.story.lock().unwrap() = Some(story);
+        }
     }
 
-    pub fn add(&mut self, message: impl Into<Message>) {
-        self.messages.push_back(message.into());
+    pub fn current(&self) -> Option<&Paragraph> {
+        self.paragraph.as_ref()
     }
 
-    pub fn current(&self) -> Option<&Message> {
-        self.messages.front()
+    pub unsafe fn next(&mut self) -> Option<&Paragraph> {
+        let mut story = self.story.lock().unwrap();
+        if let Some((paragraph, next_story)) = story.take()?.next() {
+            self.paragraph = Some(paragraph);
+            *story = Some(next_story);
+        } else {
+            self.paragraph = None;
+            *story = None;
+        }
+        self.current()
     }
 
-    pub fn dismiss(&mut self) {
-        self.messages.pop_front();
+    pub unsafe fn select(&mut self, option: usize) -> Option<&Paragraph> {
+        let mut story = self.story.lock().unwrap();
+        if let Some((paragraph, next_story)) = story.take()?.select(option) {
+            self.paragraph = Some(paragraph);
+            *story = Some(next_story);
+        } else {
+            self.paragraph = None;
+            *story = None;
+        }
+        self.current()
     }
 
     pub fn is_empty(&self) -> bool {
-        self.messages.is_empty()
+        self.story.lock().unwrap().is_none()
     }
 }

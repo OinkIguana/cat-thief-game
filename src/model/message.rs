@@ -7,20 +7,6 @@ pub struct Message {
 }
 
 impl Message {
-    pub fn new(speaker: String, message: impl Into<PrettyString>) -> Self {
-        Message {
-            speaker: Some(speaker),
-            message: message.into(),
-        }
-    }
-
-    pub fn anon(message: impl Into<PrettyString>) -> Self {
-        Message {
-            speaker: None,
-            message: message.into(),
-        }
-    }
-
     pub fn speaker(&self) -> &Option<String> {
         &self.speaker
     }
@@ -34,8 +20,25 @@ impl Message {
     }
 }
 
-impl<'a> From<&'a str> for Message {
-    fn from(string: &'a str) -> Self {
-        Message::anon(string)
+impl From<String> for Message {
+    fn from(string: String) -> Self {
+        Self::from(string.as_str())
+    }
+}
+
+
+impl From<&str> for Message {
+    fn from(string: &str) -> Self {
+        if let Some(index) = string.find(":") {
+            Message {
+                speaker: Some(string[..index].to_string()),
+                message: PrettyString::parse(&string[index + 1..]),
+            }
+        } else {
+            Message {
+                speaker: None,
+                message: PrettyString::parse(&string[..]),
+            }
+        }
     }
 }

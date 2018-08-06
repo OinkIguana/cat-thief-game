@@ -17,13 +17,12 @@ system! {
             dialog_messages: &mut Resource<DialogMessages>,
             dialog_speed: &Resource<DialogSpeed>,
         ) {
-            let message_len = dialog_messages.current().map(|msg| msg.len());
-            if let Some(message_len) = message_len {
+            let paragraph = dialog_messages.current();
+            if let Some(paragraph) = paragraph {
                 if dialog_progress.current().is_some() {
-                    dialog_progress.progress(dialog_speed.0, message_len);
+                    dialog_progress.progress(dialog_speed.0, paragraph.text().len());
                 }
-            }
-            if dialog_messages.current().is_some() {
+
                 for event in control_events.iter() {
                     match event {
                         | &ControlEvent::Action(..)
@@ -32,7 +31,7 @@ system! {
                                 dialog_progress.skip();
                             } else {
                                 dialog_progress.reset();
-                                dialog_messages.dismiss();
+                                unsafe { dialog_messages.next() };
                             }
                         }
                         _ => {}

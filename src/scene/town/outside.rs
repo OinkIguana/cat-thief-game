@@ -36,7 +36,7 @@ scene! {
             layers.set(1, town::ROOFS.clone());
         }
         if builder.get_resource::<State>().main == MainState::Start {
-            builder.get_resource_mut::<DialogMessages>().start(dialog::opening);
+            builder.get_resource_mut::<DialogMessages>().start(dialog::opening::story());
             builder.get_resource_mut::<State>().main = MainState::RunToTheAlley;
         }
         if builder.get_resource::<State>().main == MainState::RunToTheAlley {

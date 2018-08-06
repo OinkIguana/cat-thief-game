@@ -1,4 +1,4 @@
-#![feature(range_contains, const_fn, rust_2018_preview)]
+#![feature(range_contains, const_fn, generators, generator_trait)]
 #![deny(bare_trait_objects)]
 #![warn(rust_2018_idioms)]
 #![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
