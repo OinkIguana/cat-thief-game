@@ -1,11 +1,13 @@
 use std::collections::HashMap;
 use game_engine::prelude::*;
 use lazy_static::lazy_static;
+use crate::font::caudex;
 
 lazy_static! {
     static ref RULES: HashMap<&'static str, Attributes> = {
         let mut map = HashMap::new();
-        map.insert("blue", Attributes { font: None, color: Some(Color::BLUE) });
+        map.insert("location", Attributes { font: None, color: Some(Color::BLUE) });
+        map.insert("thought", Attributes { font: Some(&caudex::ITALIC_18), color: Some(0x777070ff.into()) });
         map
     };
 }
@@ -48,9 +50,7 @@ mod parser {
     enum State {
         Start,
         Open(String),
-        DoubleOpen,
         Close,
-        OpenClose,
     }
 
     pub enum Token {
@@ -60,20 +60,18 @@ mod parser {
     }
 
     fn lmm(text: &str, state: State) -> (Token, &str) {
-        let rest = &text[1..];
         use self::State::*;
-        match (state, text.chars().nth(0).unwrap()) {
-            (Start, '<')                            => lmm(rest, Open("".to_owned())),
-            (Start, '>')                            => lmm(rest, Close),
-            (Start, ch)                             => (Token::Text(ch.to_string()), rest),
-            (Open(ref st), '<') if st.is_empty()    => lmm(rest, DoubleOpen),
-            (Open(ref st), '>') if st.is_empty()    => lmm(rest, OpenClose),
-            (Open(ref st), ':') if st.is_empty()    => panic!("Missing rule name in dialog string"),
-            (Open(st), ':')                         => (Token::StartSegment(st), rest),
-            (Open(st), ch)                          => lmm(rest, Open(st + &ch.to_string())),
-            (Close, _)                              => (Token::EndSegment, text),
-            (DoubleOpen, _)                         => (Token::Text("<".to_owned()), text),
-            (OpenClose, _)                          => (Token::Text(">".to_owned()), text),
+        match (state, text.chars().nth(0)) {
+            (Start, Some('<')) => lmm(&text[1..], Open("".to_owned())),
+            (Start, Some('>')) => lmm(&text[1..], Close),
+            (Start, Some(ch)) => (Token::Text(ch.to_string()), &text[1..]),
+            (Open(ref st), Some('<')) if st.is_empty() => (Token::Text("<".to_owned()), text),
+            (Open(ref st), Some('>')) if st.is_empty() => (Token::Text(">".to_owned()), text),
+            (Open(ref st), Some(':')) if st.is_empty() => panic!("Missing rule name in dialog string"),
+            (Open(st), Some(':')) => (Token::StartSegment(st), &text[1..]),
+            (Open(st), Some(ch)) => lmm(&text[1..], Open(st + &ch.to_string())),
+            (Close, _) => (Token::EndSegment, text),
+            _ => panic!("Unexpected end of string"),
         }
     }
 

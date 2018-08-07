@@ -35,12 +35,12 @@ scene! {
             layers.set(-1, town::DOORS.clone());
             layers.set(1, town::ROOFS.clone());
         }
-        if builder.get_resource::<State>().main == MainState::Start {
-            builder.get_resource_mut::<DialogMessages>().start(dialog::opening::story());
-            builder.get_resource_mut::<State>().main = MainState::RunToTheAlley;
+        if builder.get_resource::<State>().is(MainState::Start) {
+            builder.get_resource_mut::<DialogMessages>().start(dialog::intro::opening::story());
+            builder.get_resource_mut::<State>().enter(MainState::RunToTheAlley);
         }
-        if builder.get_resource::<State>().main == MainState::RunToTheAlley {
-            builder.add_entity(StatePickup(TILE_SIZE * 24, TILE_SIZE * 7, TILE_SIZE as u32, TILE_SIZE as u32, MainState::End));
+        if builder.get_resource::<State>().is(MainState::RunToTheAlley) {
+            builder.add_entity(StatePickup(TILE_SIZE * 24, TILE_SIZE * 7, TILE_SIZE as u32, TILE_SIZE as u32, MainState::ArriveInTheAlley));
         }
         builder
             .pipe(town::collisions)

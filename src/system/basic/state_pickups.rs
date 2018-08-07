@@ -35,7 +35,7 @@ system! {
             };
             for (entity, _, state_target, collision_box) in (&*entities, &pickup, &state_target, &collision_box).join() {
                 if collision_box.0.overlaps(&player_box) {
-                    state.main = state_target.0;
+                    state.enter(state_target.0);
                     delete.insert(entity, Delete::default()).unwrap();
                 }
             }

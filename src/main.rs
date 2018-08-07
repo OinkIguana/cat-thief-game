@@ -1,4 +1,4 @@
-#![feature(range_contains, const_fn, generators, generator_trait)]
+#![feature(range_contains, const_fn, generators, generator_trait, pattern_parentheses)]
 #![deny(bare_trait_objects)]
 #![warn(rust_2018_idioms)]
 #![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
@@ -71,6 +71,8 @@ fn main() -> game_engine::Result<()> {
                 .with(ShowLoader::default(), "ShowLoader", &[])
                 .build()
         )
+
+        .add_dispatcher(system::state::dispatcher)
 
         .add_dispatcher(|builder|
             builder

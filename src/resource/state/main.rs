@@ -2,6 +2,7 @@
 pub enum MainState {
     Start,
     RunToTheAlley,
+    ArriveInTheAlley,
     End,
 }
 

@@ -1,0 +1,9 @@
+[[styles]]
+name = "regular"
+file = "ttf/Caudex-Regular.ttf"
+sizes = [18]
+
+[[styles]]
+name = "italic"
+file = "ttf/Caudex-Italic.ttf"
+sizes = [18]
