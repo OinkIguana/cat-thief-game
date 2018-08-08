@@ -1,7 +1,8 @@
 use game_engine::system;
+use inkgen::runtime::Paragraph;
 use crate::resource::{
     constant::DialogSpeed,
-    dialog_messages::{DialogProgress, DialogMessages},
+    dialog_messages::{DialogProgress, DialogMessages, DialogSelection},
     control_events::{ControlEvents, ControlEvent},
 };
 
@@ -15,9 +16,10 @@ system! {
             control_events: &Resource<ControlEvents>,
             dialog_progress: &mut Resource<DialogProgress>,
             dialog_messages: &mut Resource<DialogMessages>,
+            dialog_selection: &mut Resource<DialogSelection>,
             dialog_speed: &Resource<DialogSpeed>,
         ) {
-            let paragraph = dialog_messages.current();
+            let paragraph = dialog_messages.current().cloned();
             if let Some(paragraph) = paragraph {
                 if dialog_progress.current().is_some() {
                     dialog_progress.progress(dialog_speed.0, paragraph.text().len());
@@ -25,13 +27,24 @@ system! {
 
                 for event in control_events.iter() {
                     match event {
-                        | &ControlEvent::Action(..)
-                        | &ControlEvent::Cancel(..) => {
+                        ControlEvent::Down(..) => dialog_selection.down(),
+                        ControlEvent::Up(..) => dialog_selection.down(),
+
+                        | ControlEvent::Action(..)
+                        | ControlEvent::Cancel(..) => {
                             if dialog_progress.current().is_some() {
                                 dialog_progress.skip();
                             } else {
                                 dialog_progress.reset();
-                                unsafe { dialog_messages.next() };
+                                let current =
+                                    if paragraph.choices().is_some() {
+                                        unsafe { dialog_messages.select(dialog_selection.current()) }
+                                    } else {
+                                        unsafe { dialog_messages.next() }
+                                    };
+                                if let Some(count) = current.and_then(Paragraph::choices).map(|choices| choices.len()){
+                                    dialog_selection.set_up(count);
+                                }
                             }
                         }
                         _ => {}

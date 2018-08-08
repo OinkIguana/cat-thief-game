@@ -12,6 +12,7 @@ use crate::font::default::REGULAR_20 as DEFAULT_FONT;
 pub struct DialogDrawable {
     pub index: Option<usize>,
     pub paragraph: Option<Paragraph>,
+    pub selection: usize,
 }
 
 impl DialogDrawable {
@@ -84,12 +85,12 @@ impl Drawable for DialogDrawable {
             let max_width = size.width - 2 * H_PADDING as u32;
 
             // draw the text segments
-            let segments = message.message().clone();
+            let segments = message.message().clone().0;
 
             unsafe {
                 if CALCULATED_LINES.is_none() || PREVIOUS_MESSAGE.as_ref() != Some(paragraph) {
                     PREVIOUS_MESSAGE = Some(paragraph.clone());
-                    CALCULATED_LINES = Some(segments.0
+                    CALCULATED_LINES = Some(segments
                         .iter()
                         .flat_map(|(text, attributes)| {
                             let lines: Vec<_> = text.split("\n").collect();
@@ -199,9 +200,9 @@ impl Drawable for DialogDrawable {
                         if text.is_empty() { break; }
                         let to_print =
                             if self.index.is_some() && printed + text.len() > self.index.unwrap() {
-                                &text[..self.index.unwrap() - printed]
+                                text.chars().take(self.index.unwrap() - printed).collect()
                             } else {
-                                &text
+                                text.to_owned()
                             };
                         printed += to_print.len();
                         canvas.set_font(DEFAULT_FONT);
@@ -212,13 +213,57 @@ impl Drawable for DialogDrawable {
                         if let Some(font) = attributes.font {
                             canvas.set_font(*font);
                         }
-                        canvas.draw_text(Point::new(x, y + ascent - max_y), to_print.to_string())?;
+                        canvas.draw_text(Point::new(x, y + ascent - max_y), to_print)?;
                         x += width as i32;
                         if self.index.is_some() && printed == self.index.unwrap() {
                             break 'done;
                         }
                     }
                     y += line.spacing;
+                }
+                if self.index.is_none() {
+                    if let Some(choices) = paragraph.choices() {
+                        canvas.set_font(DEFAULT_FONT);
+                        let line_spacing = canvas.line_spacing()?;
+                        let strings: Vec<_> = choices.iter().map(|choice| Message::from(choice).message().plain()).collect();
+
+                        // TODO: arr_width is a constant... so measure it once manually, not every frame
+                        let Dimen { width: arr_width, .. } = canvas.measure_text(String::from("=>"))?;
+
+                        let bounds = strings.iter()
+                            .try_fold(Dimen::default(), |size, string| -> game_engine::Result<Dimen> {
+                                let Dimen { width, .. } = canvas.measure_text(format!("{}", string))?;
+                                Ok(Dimen::new(
+                                    u32::max(width, size.width),
+                                    size.height + line_spacing as u32,
+                                ))
+                            })?
+                            .extend(Dimen::new(32 + arr_width, 16));
+                        let options_box = Rect::from(
+                            Point::new(
+                                (size.width - bounds.width) as i32,
+                                (size.height - BOX_HEIGHT - bounds.height) as i32,
+                            ),
+                            bounds,
+                        );
+                        canvas.set_color(Color::WHITE);
+                        canvas.draw_rect_filled(options_box)?;
+                        canvas.set_color(Color::BLACK);
+                        for (i, message) in strings.into_iter().enumerate() {
+                            let point = Point::new(
+                                options_box.x + 16 + arr_width as i32,
+                                options_box.y + 8 + line_spacing * i as i32,
+                            );
+                            canvas.draw_text(point, message)?;
+                            if i == self.selection {
+                                let point = Point::new(
+                                    options_box.x + 8 as i32,
+                                    options_box.y + 8 + line_spacing * i as i32,
+                                );
+                                canvas.draw_text(point, String::from("=>"))?;
+                            }
+                        }
+                    }
                 }
             }
         }

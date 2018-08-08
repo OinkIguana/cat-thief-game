@@ -42,6 +42,12 @@ impl PrettyString {
             .map(|(string, _)| string.len())
             .fold(0, |a, b| a + b)
     }
+
+    pub fn plain(&self) -> String {
+        self.0.iter()
+            .map(|(string, _)| string.clone())
+            .collect()
+    }
 }
 
 mod parser {

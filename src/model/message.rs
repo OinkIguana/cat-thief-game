@@ -26,6 +26,11 @@ impl From<String> for Message {
     }
 }
 
+impl From<&String> for Message {
+    fn from(string: &String) -> Self {
+        Self::from(string.as_str())
+    }
+}
 
 impl From<&str> for Message {
     fn from(string: &str) -> Self {

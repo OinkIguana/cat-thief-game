@@ -1,7 +1,40 @@
 use std::sync::Mutex;
 use inkgen::runtime::{Story, Paragraph};
 
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Default, Debug)]
+pub struct DialogSelection {
+    max: usize,
+    current: usize,
+}
+
+impl DialogSelection {
+    pub fn set_up(&mut self, max: usize) {
+        self.max = max;
+        self.current = 0;
+    }
+
+    pub fn up(&mut self) {
+        if self.max != 0 {
+            self.current = (self.current + self.max - 1) % self.max;
+        } else {
+            self.current = 1;
+        }
+    }
+
+    pub fn down(&mut self) {
+        if self.max != 0 {
+            self.current = (self.current + 1) % self.max;
+        } else {
+            self.current = 1;
+        }
+    }
+
+    pub fn current(&self) -> usize {
+        self.current
+    }
+}
+
+#[derive(Clone, PartialEq, Debug)]
 pub struct DialogProgress(Option<f32>);
 
 impl Default for DialogProgress {
