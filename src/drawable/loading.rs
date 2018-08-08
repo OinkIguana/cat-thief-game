@@ -1,7 +1,7 @@
 use std::any::Any;
 use game_engine::prelude::*;
 
-use crate::font::caudex::REGULAR_18 as caudex;
+use crate::font::default::REGULAR_20 as default;
 
 #[derive(Default, Debug)]
 pub struct LoadingDrawable {
@@ -24,7 +24,7 @@ impl Drawable for LoadingDrawable {
         if !self.visible { return Ok(()); }
 
         let size = canvas.size();
-        canvas.set_font(caudex);
+        canvas.set_font(default);
         canvas.set_transform(Rect::from(Point::default(), size), Rect::from(Point::default(), size));
         canvas.set_color(Color::BLACK);
         canvas.draw_rect_filled(Rect::from(Point::default(), size))?;

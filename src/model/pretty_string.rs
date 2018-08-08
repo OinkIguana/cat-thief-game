@@ -1,13 +1,14 @@
 use std::collections::HashMap;
 use game_engine::prelude::*;
 use lazy_static::lazy_static;
-use crate::font::caudex;
+use crate::font::default;
 
 lazy_static! {
     static ref RULES: HashMap<&'static str, Attributes> = {
         let mut map = HashMap::new();
         map.insert("location", Attributes { font: None, color: Some(Color::BLUE) });
-        map.insert("thought", Attributes { font: Some(&caudex::ITALIC_18), color: Some(0x777070ff.into()) });
+        map.insert("thought", Attributes { font: Some(&default::ITALIC_20), color: Some(0x555050ff.into()) });
+        map.insert("yell", Attributes { font: Some(&default::ITALIC_20), color: None });
         map
     };
 }
@@ -61,15 +62,16 @@ mod parser {
 
     fn lmm(text: &str, state: State) -> (Token, &str) {
         use self::State::*;
-        match (state, text.chars().nth(0)) {
-            (Start, Some('<')) => lmm(&text[1..], Open("".to_owned())),
-            (Start, Some('>')) => lmm(&text[1..], Close),
-            (Start, Some(ch)) => (Token::Text(ch.to_string()), &text[1..]),
+        let mut chars = text.chars();
+        match (state, chars.next()) {
+            (Start, Some('<')) => lmm(chars.as_str(), Open("".to_owned())),
+            (Start, Some('>')) => lmm(chars.as_str(), Close),
+            (Start, Some(ch)) => (Token::Text(ch.to_string()), chars.as_str()),
             (Open(ref st), Some('<')) if st.is_empty() => (Token::Text("<".to_owned()), text),
             (Open(ref st), Some('>')) if st.is_empty() => (Token::Text(">".to_owned()), text),
             (Open(ref st), Some(':')) if st.is_empty() => panic!("Missing rule name in dialog string"),
-            (Open(st), Some(':')) => (Token::StartSegment(st), &text[1..]),
-            (Open(st), Some(ch)) => lmm(&text[1..], Open(st + &ch.to_string())),
+            (Open(st), Some(':')) => (Token::StartSegment(st), chars.as_str()),
+            (Open(st), Some(ch)) => lmm(chars.as_str(), Open(st + &ch.to_string())),
             (Close, _) => (Token::EndSegment, text),
             _ => panic!("Unexpected end of string"),
         }

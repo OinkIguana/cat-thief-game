@@ -42,10 +42,9 @@ pub struct DialogMessages {
 
 impl DialogMessages {
     pub fn start(&mut self, story: Story) {
-        if let Some((paragraph, story)) = unsafe { story.next() } {
-            self.paragraph = Some(paragraph);
-            *self.story.lock().unwrap() = Some(story);
-        }
+        let (paragraph, story) = unsafe { story.next() };
+        self.paragraph = Some(paragraph);
+        *self.story.lock().unwrap() = story;
     }
 
     pub fn current(&self) -> Option<&Paragraph> {
@@ -54,24 +53,24 @@ impl DialogMessages {
 
     pub unsafe fn next(&mut self) -> Option<&Paragraph> {
         let mut story = self.story.lock().unwrap();
-        if let Some((paragraph, next_story)) = story.take()?.next() {
-            self.paragraph = Some(paragraph);
-            *story = Some(next_story);
-        } else {
+        if story.is_none() {
             self.paragraph = None;
-            *story = None;
+        } else {
+            let (paragraph, next_story) = story.take()?.next();
+            self.paragraph = Some(paragraph);
+            *story = next_story;
         }
         self.current()
     }
 
     pub unsafe fn select(&mut self, option: usize) -> Option<&Paragraph> {
         let mut story = self.story.lock().unwrap();
-        if let Some((paragraph, next_story)) = story.take()?.select(option) {
-            self.paragraph = Some(paragraph);
-            *story = Some(next_story);
-        } else {
+        if story.is_none() {
             self.paragraph = None;
-            *story = None;
+        } else {
+            let (paragraph, next_story) = story.take()?.select(option);
+            self.paragraph = Some(paragraph);
+            *story = next_story;
         }
         self.current()
     }

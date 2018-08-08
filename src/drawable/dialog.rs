@@ -6,7 +6,7 @@ use crate::model::{
     message::Message,
     pretty_string::Attributes,
 };
-use crate::font::caudex::REGULAR_18 as DEFAULT_FONT;
+use crate::font::default::REGULAR_20 as DEFAULT_FONT;
 
 #[derive(Default, Debug)]
 pub struct DialogDrawable {

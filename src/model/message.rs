@@ -31,8 +31,8 @@ impl From<&str> for Message {
     fn from(string: &str) -> Self {
         if let Some(index) = string.find(":") {
             Message {
-                speaker: Some(string[..index].to_string()),
-                message: PrettyString::parse(&string[index + 1..]),
+                speaker: Some(string[..index].trim().to_string()),
+                message: PrettyString::parse(&string[index + 1..].trim()),
             }
         } else {
             Message {

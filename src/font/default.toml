@@ -1,0 +1,14 @@
+[[styles]]
+name = "regular"
+file = "ttf/Alegreya-Regular.ttf"
+sizes = [20]
+
+[[styles]]
+name = "italic"
+file = "ttf/Alegreya-Italic.ttf"
+sizes = [20]
+
+[[styles]]
+name = "bold"
+file = "ttf/Alegreya-Bold.ttf"
+sizes = [20]
