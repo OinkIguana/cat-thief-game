@@ -13,6 +13,7 @@ use super::outside::TOWN_OUTSIDE;
 
 scene! {
     pub TOWN_INSIDE {
+        bounds: Rect::new(0, 0, 43 * TILE_SIZE as u32, 40 * TILE_SIZE as u32),
         entities: [
             Dialog,
             Loading,
