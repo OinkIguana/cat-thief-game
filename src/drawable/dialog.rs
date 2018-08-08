@@ -102,9 +102,10 @@ impl Drawable for DialogDrawable {
                         })
                         .fold(Ok(vec![Line::default()]), |lines: game_engine::Result<Vec<Line>>, (text, attributes, newline)| {
                             let mut lines = lines?;
-                            canvas.set_font(DEFAULT_FONT);
                             if let Some(font) = attributes.font {
                                 canvas.set_font(*font);
+                            } else {
+                                canvas.set_font(DEFAULT_FONT);
                             }
                             let Dimen { width, height } = canvas.measure_text(text.to_owned())?;
                             if lines.last().unwrap().width + width > max_width {
@@ -113,35 +114,50 @@ impl Drawable for DialogDrawable {
                                 let mut start = 0;
                                 let mut end = 0;
                                 loop {
-                                    let Dimen { width, height } = canvas.measure_text(text[start..end + 1].to_owned())?;
+                                    let mut word_len = 0;
+                                    while let Some(ch) = text.chars().nth(end + word_len) {
+                                        if ch.is_whitespace() {
+                                            if word_len == 0 {
+                                                end += 1;
+                                            } else {
+                                                break;
+                                            }
+                                        } else {
+                                            word_len += 1;
+                                        }
+                                    }
+                                    let Dimen { width, height } = canvas.measure_text(text.chars().skip(start).take(end + word_len - start).collect())?;
                                     if lines.last().unwrap().width + width <= max_width {
-                                        end += 1;
-                                        if end != len - 1 {
+                                        end += word_len;
+                                        if end < len - 1 {
                                             continue;
                                         }
                                     }
-                                    if let Some(current_line) = lines.last_mut() {
-                                        let substr = &text[start..end];
-                                        let (min_y, max_y) = substr.chars()
-                                            .filter_map(|ch| canvas.glyph_metrics(ch).ok().and_then(|x| x))
-                                            .fold((None, None), |(min_y, max_y), metrics| (
-                                                min_y.map(|min_y| i32::min(min_y, metrics.miny)).or(Some(metrics.miny)),
-                                                max_y.map(|max_y| i32::max(max_y, metrics.maxy)).or(Some(metrics.maxy)),
-                                            ));
-                                        current_line.width += width;
-                                        current_line.spacing = i32::max(current_line.spacing, canvas.line_spacing()?);
-                                        current_line.height = u32::max(current_line.height, height);
-                                        current_line.segments.push(Segment {
-                                            text: substr.to_string(),
-                                            attributes: *attributes,
-                                            size: Dimen { width, height },
-                                            ascent: canvas.font_ascent()?,
-                                            min_y: min_y.unwrap_or(0),
-                                            max_y: max_y.unwrap_or(0),
-                                        });
-                                    }
+                                    let current_line = lines.last_mut().unwrap();
+                                    let (min_y, max_y) = text.chars()
+                                        .skip(start)
+                                        .take(end - start)
+                                        .filter_map(|ch| canvas.glyph_metrics(ch).ok().and_then(|x| x))
+                                        .fold((None, None), |(min_y, max_y), metrics| (
+                                            min_y.map(|min_y| i32::min(min_y, metrics.miny)).or(Some(metrics.miny)),
+                                            max_y.map(|max_y| i32::max(max_y, metrics.maxy)).or(Some(metrics.maxy)),
+                                        ));
+                                    current_line.width += width;
+                                    current_line.spacing = i32::max(current_line.spacing, canvas.line_spacing()?);
+                                    current_line.height = u32::max(current_line.height, height);
+                                    current_line.segments.push(Segment {
+                                        text: text.chars()
+                                            .skip(start)
+                                            .take(end - start)
+                                            .collect(),
+                                        attributes: *attributes,
+                                        size: Dimen { width, height },
+                                        ascent: canvas.font_ascent()?,
+                                        min_y: min_y.unwrap_or(0),
+                                        max_y: max_y.unwrap_or(0),
+                                    });
                                     lines.push(Line::default());
-                                    if end == len - 1 {
+                                    if end >= len - 1 {
                                         break;
                                     }
                                     start = end;
