@@ -1,7 +1,6 @@
 #![feature(range_contains, const_fn, generators, generator_trait, pattern_parentheses)]
 #![deny(bare_trait_objects)]
 #![warn(rust_2018_idioms)]
-#![allow(dead_code)] // while still in early development, there's a lot of stuff unused.
 
 pub mod component;
 pub mod constant;
@@ -46,6 +45,9 @@ use crate::system::{
 
 fn main() -> game_engine::Result<()> {
     Game::new()
+        .titled("Fun cat game")
+        .target_fps(60)
+
         .pipe(component::register)
         .pipe(resource::register)
         .pipe(plugin::register)
