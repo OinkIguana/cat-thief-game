@@ -18,7 +18,7 @@ system! {
                 if let Some(drawable) = drawable.as_any_mut().downcast_mut::<DialogDrawable>() {
                     drawable.index = dialog_progress.current();
                     drawable.paragraph = dialog_messages.current().cloned();
-                    drawable.selection = dialog_selection.current();
+                    drawable.selection = dialog_selection.current() - 1;
                 }
             }
         }
