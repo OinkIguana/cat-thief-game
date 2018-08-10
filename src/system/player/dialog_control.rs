@@ -38,9 +38,9 @@ system! {
                                 dialog_progress.reset();
                                 let current =
                                     if paragraph.choices().is_some() {
-                                        unsafe { dialog_messages.select(dialog_selection.current()) }
+                                        dialog_messages.select(dialog_selection.current())
                                     } else {
-                                        unsafe { dialog_messages.next() }
+                                        dialog_messages.next()
                                     };
                                 if let Some(count) = current.and_then(Paragraph::choices).map(|choices| choices.len()){
                                     dialog_selection.set_up(count);

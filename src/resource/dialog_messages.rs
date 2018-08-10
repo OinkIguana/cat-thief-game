@@ -75,35 +75,50 @@ pub struct DialogMessages {
 
 impl DialogMessages {
     pub fn start(&mut self, story: Story) {
-        let (paragraph, story) = unsafe { story.next() };
+        let (paragraph, story) = match story {
+            Story::Unstarted(story) => story.start(),
+            _ => panic!("The story to start must not be started"),
+        };
         self.paragraph = Some(paragraph);
-        *self.story.lock().unwrap() = story;
+        *self.story.lock().unwrap() = Some(story);
     }
 
     pub fn current(&self) -> Option<&Paragraph> {
         self.paragraph.as_ref()
     }
 
-    pub unsafe fn next(&mut self) -> Option<&Paragraph> {
+    pub fn next(&mut self) -> Option<&Paragraph> {
         let mut story = self.story.lock().unwrap();
-        if story.is_none() {
-            self.paragraph = None;
-        } else {
-            let (paragraph, next_story) = story.take()?.next();
-            self.paragraph = Some(paragraph);
-            *story = next_story;
+        match story.take() {
+            None => self.paragraph = None,
+            Some(Story::Ended(ended_story)) => {
+                self.paragraph = None;
+                *story = Some(Story::Ended(ended_story));
+            }
+            Some(Story::Unstarted(..)) => panic!("The story must be started already to continue"),
+            Some(Story::Regular(regular_story)) => {
+                let (paragraph, next_story) = regular_story.next();
+                self.paragraph = Some(paragraph);
+                *story = Some(next_story);
+            }
         }
         self.current()
     }
 
-    pub unsafe fn select(&mut self, option: usize) -> Option<&Paragraph> {
+    pub fn select(&mut self, option: usize) -> Option<&Paragraph> {
         let mut story = self.story.lock().unwrap();
-        if story.is_none() {
-            self.paragraph = None;
-        } else {
-            let (paragraph, next_story) = story.take()?.select(option);
-            self.paragraph = Some(paragraph);
-            *story = next_story;
+        match story.take() {
+            None => self.paragraph = None,
+            Some(Story::Ended(ended_story)) => {
+                self.paragraph = None;
+                *story = Some(Story::Ended(ended_story));
+            }
+            Some(Story::Unstarted(..)) => panic!("The story must be started already to continue"),
+            Some(Story::Regular(regular_story)) => {
+                let (paragraph, next_story) = regular_story.select(option);
+                self.paragraph = Some(paragraph);
+                *story = Some(next_story);
+            }
         }
         self.current()
     }
