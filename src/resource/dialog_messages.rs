@@ -124,6 +124,9 @@ impl DialogMessages {
     }
 
     pub fn is_empty(&self) -> bool {
-        self.story.lock().unwrap().is_none()
+        match &*self.story.lock().unwrap() {
+            None | Some(Story::Ended(..)) => true,
+            _ => false,
+        }
     }
 }
