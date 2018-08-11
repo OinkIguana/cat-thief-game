@@ -34,4 +34,8 @@ impl MovePath {
     pub fn arrive(&mut self) {
         self.target = self.points.pop_front();
     }
+
+    pub fn destination(&self) -> Option<Point<f32>> {
+        self.points.back().cloned()
+    }
 }

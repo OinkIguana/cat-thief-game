@@ -26,7 +26,6 @@ use crate::system::{
         doors::EnterDoors,
     },
     player::{
-        dialog_control::DialogControl,
         movement::PlayerMovement,
     },
     basic::{
@@ -55,16 +54,15 @@ fn main() -> game_engine::Result<()> {
         .add_conditional_dispatcher(|world| !world.read_resource::<IsLoading>().0, |builder|
             builder
                 .with(HideLoader::default(), "HideLoader", &[])
-                .with(DialogControl::default(), "DialogControl", &[])
                 .with(MoveByMovePath::default(), "MoveByMovePath", &[])
-                .with(PlayerMovement::default(), "PlayerMovement", &["DialogControl", "MoveByMovePath"])
+                .with(PlayerMovement::default(), "PlayerMovement", &["MoveByMovePath"])
                 .with(ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"])
                 .with(CameraTarget::default(), "CameraTarget", &["ApplyVelocity"])
                 .with(AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"])
                 .with(EnterDoors::default(), "EnterDoors", &["ApplyVelocity"])
                 .with(StatePickups::default(), "StatePickups", &["ApplyVelocity"])
                 .with(MaintainSpriteDrawable::default(), "MaintainSpriteDrawable", &["AnimateWalkCycle"])
-                .with(MaintainDialogDrawable::default(), "MaintainDialogDrawable", &["DialogControl"])
+                .with(MaintainDialogDrawable::default(), "MaintainDialogDrawable", &[])
                 .build()
         )
 

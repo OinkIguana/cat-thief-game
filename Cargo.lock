@@ -66,6 +66,7 @@ dependencies = [
  "game-engine 0.1.0",
  "ink-generator 0.1.0",
  "lazy_static 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ron 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde-xml-rs 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -756,6 +757,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "ron"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "base64 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bitflags 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "safemem"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -828,6 +839,9 @@ dependencies = [
 name = "serde"
 version = "1.0.70"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "serde_derive 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "serde-xml-rs"
@@ -1452,6 +1466,7 @@ dependencies = [
 "checksum relay 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "1576e382688d7e9deecea24417e350d3062d97e32e45d70b1cde65994ff1489a"
 "checksum remove_dir_all 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3488ba1b9a2084d38645c4c08276a1752dcbf2c7130d74f1569681ad5d2799c5"
 "checksum reqwest 0.7.3 (registry+https://github.com/rust-lang/crates.io-index)" = "5866613d84e2a39c0479a960bf2d0eff1fbfc934f02cd42b5c08c1e1efc5b1fd"
+"checksum ron 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "a9fa11b7a38511d46ff1959ae46ebb60bd8a746f17bdd0206b4c8de7559ac47b"
 "checksum safemem 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "e27a8b19b835f7aea908818e871f5cc3a5a186550c30773be987e155e8163d8f"
 "checksum schannel 0.1.13 (registry+https://github.com/rust-lang/crates.io-index)" = "dc1fabf2a7b6483a141426e1afd09ad543520a77ac49bd03c286e7696ccfd77f"
 "checksum scoped-tls 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "332ffa32bf586782a3efaeb58f127980944bbc8c4d6913a86107ac2a5ab24b28"

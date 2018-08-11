@@ -1,6 +1,6 @@
 use game_engine::system;
 use crate::resource::{
-    dialog_messages::DialogMessages,
+    dialog::DialogMessages,
     state::{State, MainState},
 };
 use crate::dialog::intro::enter_alley;

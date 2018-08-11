@@ -1,6 +1,6 @@
 use game_engine::{system, prelude::*};
 use crate::drawable::DialogDrawable;
-use crate::resource::dialog_messages::{DialogMessages, DialogProgress, DialogSelection};
+use crate::resource::dialog::{DialogMessages, DialogProgress, DialogSelection};
 
 #[derive(Default, Debug)]
 pub struct MaintainDialogDrawable;

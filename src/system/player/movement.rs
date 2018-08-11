@@ -6,8 +6,8 @@ use crate::component::{
 };
 use crate::resource::{
     constant::BaseMovementSpeed,
-    control_events::ControlState,
-    dialog_messages::DialogMessages,
+    control::ControlState,
+    dialog::DialogMessages,
 };
 
 #[derive(Default, Debug)]

@@ -1,8 +1,5 @@
 use game_engine::prelude::*;
-use crate::resource::{
-    control_events::{ControlEvent, ControlEvents, ControlState},
-    control_scheme::{ControlScheme, Control},
-};
+use crate::resource::control::{ControlScheme, Control, ControlEvent, ControlEvents, ControlState};
 
 pub(super) fn process_control_events(world: &mut World) {
     let mut control_events = world.write_resource::<ControlEvents>();

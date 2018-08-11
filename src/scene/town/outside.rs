@@ -9,7 +9,7 @@ use crate::entity::{
 };
 use crate::tile_grid::town;
 use crate::resource::{
-    dialog_messages::DialogMessages,
+    dialog::DialogMessages,
     state::{State, MainState},
 };
 use crate::dialog;
