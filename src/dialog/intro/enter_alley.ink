@@ -1,6 +1,6 @@
 You: <thought:Something feels off...>
 You: Who's in there? You'd best come out quick. I don't take kindly to being snuck up on.
-(Voice): Heh. You're a sharp one...
+(Voice): Heh. You're a sharp one... #ComeOut
 * [...]
   Mystery Man: ... but I knew that already. Your reputation precedes you, kid.
   Mystery Man: I've been looking for talent like yours. Heard it could be found around here.
