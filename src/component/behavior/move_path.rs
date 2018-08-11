@@ -9,6 +9,17 @@ pub struct MovePath {
 }
 
 impl MovePath {
+    pub fn from(points: &[Point<f32>]) -> Self {
+        if points.is_empty() {
+            Self::default()
+        } else {
+            Self {
+                points: VecDeque::from(points[1..].to_vec()),
+                target: points.get(0).cloned(),
+            }
+        }
+    }
+
     pub fn new(point: Point<f32>) -> Self {
         let mut path = MovePath::default();
         path.add(point);

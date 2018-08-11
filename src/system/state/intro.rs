@@ -1,9 +1,9 @@
 use game_engine::system;
 use crate::resource::{
-    dialog::DialogMessages,
+    cutscene::CurrentCutscene,
     state::{State, MainState},
 };
-use crate::dialog::intro::enter_alley;
+use crate::cutscene::intro::enter_alley;
 
 #[derive(Default, Debug)]
 pub struct IntroSceneTriggers;
@@ -13,10 +13,10 @@ system! {
         fn run(
             &mut self,
             state: &Resource<State>,
-            dialog_messages: &mut Resource<DialogMessages>,
+            current_cutscene: &mut Resource<CurrentCutscene>,
         ) {
             if state.just_started(MainState::ArriveInTheAlley) {
-                dialog_messages.start(enter_alley::story());
+                current_cutscene.start(enter_alley());
             }
         }
     }

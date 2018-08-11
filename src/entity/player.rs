@@ -6,12 +6,14 @@ use crate::component::{
     position::{Position, PreviousPosition},
     velocity::Velocity,
     collision_box::CollisionBox,
+    id::Id,
 };
 use crate::drawable::SpriteDrawable;
 use crate::sprite::{MALE_WALKCYCLE, MALE_PANTS};
 
 entity! {
     pub Player(x: i32, y: i32) {
+        Id::Player,
         marker::Player,
         marker::Solid,
         marker::CameraTarget,

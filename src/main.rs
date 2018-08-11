@@ -4,6 +4,7 @@
 
 pub mod component;
 pub mod constant;
+pub mod cutscene;
 pub mod dialog;
 pub mod drawable;
 pub mod entity;
@@ -39,6 +40,7 @@ use crate::system::{
         dialog::MaintainDialogDrawable,
         loading::MaintainLoadingDrawable,
     },
+    cutscene::RunCutscene,
     animations::AnimateWalkCycle,
 };
 
@@ -54,9 +56,10 @@ fn main() -> game_engine::Result<()> {
         .add_conditional_dispatcher(|world| !world.read_resource::<IsLoading>().0, |builder|
             builder
                 .with(HideLoader::default(), "HideLoader", &[])
-                .with(MoveByMovePath::default(), "MoveByMovePath", &[])
-                .with(PlayerMovement::default(), "PlayerMovement", &["MoveByMovePath"])
-                .with(ApplyVelocity::default(), "ApplyVelocity", &["PlayerMovement"])
+                .with(RunCutscene::default(), "RunCutscene", &[])
+                .with(PlayerMovement::default(), "PlayerMovement", &["RunCutscene"])
+                .with(MoveByMovePath::default(), "MoveByMovePath", &["PlayerMovement"])
+                .with(ApplyVelocity::default(), "ApplyVelocity", &["MoveByMovePath"])
                 .with(CameraTarget::default(), "CameraTarget", &["ApplyVelocity"])
                 .with(AnimateWalkCycle::default(), "AnimateWalkCycle", &["ApplyVelocity"])
                 .with(EnterDoors::default(), "EnterDoors", &["ApplyVelocity"])

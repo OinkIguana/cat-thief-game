@@ -14,7 +14,7 @@ pub use self::{
     dialog_speed::*,
 };
 
-pub fn register<'a, 'b>(game: Game<'a, 'b>) -> Game<'a, 'b> {
+pub fn register(game: Game<'a, 'b>) -> Game<'a, 'b> {
     game.add_resource(DialogEvents::default())
         .add_resource(DialogSpeed::default())
         .add_resource(DialogMessages::default())

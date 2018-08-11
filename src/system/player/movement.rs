@@ -1,6 +1,5 @@
 use game_engine::{system, prelude::*};
 use crate::component::{
-    behavior::MovePath,
     marker::Player,
     velocity::Velocity,
 };
@@ -8,6 +7,7 @@ use crate::resource::{
     constant::BaseMovementSpeed,
     control::ControlState,
     dialog::DialogMessages,
+    cutscene::CurrentCutscene,
 };
 
 #[derive(Default, Debug)]
@@ -17,12 +17,11 @@ system! {
     impl PlayerMovement {
         fn run(
             &mut self,
-            entities: &Entities,
             velocity: &mut Component<Velocity>,
-            move_path: &Component<MovePath>,
             player: &Component<Player>,
             control_state: &Resource<ControlState>,
             base_movement_speed: &Resource<BaseMovementSpeed>,
+            current_cutscene: &Resource<CurrentCutscene>,
             dialog_messages: &Resource<DialogMessages>,
         ) {
             let axis_h = control_state.axis_h as f32;
@@ -33,12 +32,8 @@ system! {
             let hspeed = axis_h / scale * movement_speed;
             let vspeed = axis_v / scale * movement_speed;
 
-            for (entity, _, velocity) in (&*entities, &player, &mut velocity).join() {
-                if move_path.get(entity).map(|p| !p.is_empty()).unwrap_or(false) {
-                    // can't move if the move_path is overriding
-                    continue;
-                }
-                if dialog_messages.current().is_some() {
+            for (_, velocity) in (&player, &mut velocity).join() {
+                if dialog_messages.current().is_some() || !current_cutscene.is_over() {
                     // disable player control while dialog is visible
                     velocity.0 = Point::default();
                 } else {
