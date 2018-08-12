@@ -40,7 +40,6 @@ use crate::system::{
         dialog::MaintainDialogDrawable,
         loading::MaintainLoadingDrawable,
     },
-    cutscene::RunCutscene,
     animations::AnimateWalkCycle,
 };
 
@@ -56,8 +55,7 @@ fn main() -> game_engine::Result<()> {
         .add_conditional_dispatcher(|world| !world.read_resource::<IsLoading>().0, |builder|
             builder
                 .with(HideLoader::default(), "HideLoader", &[])
-                .with(RunCutscene::default(), "RunCutscene", &[])
-                .with(PlayerMovement::default(), "PlayerMovement", &["RunCutscene"])
+                .with(PlayerMovement::default(), "PlayerMovement", &[])
                 .with(MoveByMovePath::default(), "MoveByMovePath", &["PlayerMovement"])
                 .with(ApplyVelocity::default(), "ApplyVelocity", &["MoveByMovePath"])
                 .with(CameraTarget::default(), "CameraTarget", &["ApplyVelocity"])

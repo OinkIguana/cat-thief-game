@@ -9,7 +9,7 @@ use crate::component::{
 };
 use crate::resource::{
     dialog::{DialogEvents, DialogMessages},
-    state::MainState,
+    state::{State, MainState},
 };
 
 #[derive(Clone, Debug)]
@@ -25,16 +25,9 @@ where for<'a> E: Deserialize<'a> + PartialEq + Sync + Send + 'static {
     StateChange(MainState),
 }
 
-#[derive(Clone, Debug)]
-pub enum Action {
-    Move(Id, &'static [Point<f32>]),
-    Dialog(fn() -> Story),
-    StateChange(MainState),
-}
-
 pub trait Cutscene: Sync + Send {
     fn is_over(&self) -> bool;
-    fn actions(&mut self, world: &World) -> Vec<Action>;
+    fn run(&mut self, world: &mut World);
 }
 
 pub struct StandardCutscene<E>
@@ -63,18 +56,17 @@ where for<'a> E: Deserialize<'a> + PartialEq + Sync + Send + 'static {
         self.steps.is_empty() && self.delay == 0
     }
 
-    fn actions(&mut self, world: &World) -> Vec<Action> {
-        let mut actions = vec![];
+    fn run(&mut self, world: &mut World) {
         if self.delay != 0 {
             self.delay -= 1;
-            return actions;
+            return;
         }
         'outer: loop {
             match self.steps.first() {
                 None => break,
-                Some(Step::StateChange(state)) => {
+                Some(Step::StateChange(new_state)) => {
                     self.steps = &self.steps[1..];
-                    actions.push(Action::StateChange(*state));
+                    world.write_resource::<State>().enter(*new_state);
                 }
                 Some(Step::Break) => {
                     self.steps = &self.steps[1..];
@@ -84,9 +76,15 @@ where for<'a> E: Deserialize<'a> + PartialEq + Sync + Send + 'static {
                     self.delay = *timer;
                     break
                 }
-                Some(Step::Move(id, move_path)) => {
+                Some(Step::Move(target, path)) => {
                     self.steps = &self.steps[1..];
-                    actions.push(Action::Move(*id, *move_path));
+                    let entities = world.entities();
+                    let id = world.read_storage::<Id>();
+                    for (entity, id) in (&*entities, &id).join() {
+                        if id == target {
+                            world.write_storage::<MovePath>().insert(entity, MovePath::from(*path)).unwrap();
+                        }
+                    }
                 }
                 Some(Step::AwaitMoveEnd(target)) => {
                     let (entities, id) = (
@@ -125,10 +123,9 @@ where for<'a> E: Deserialize<'a> + PartialEq + Sync + Send + 'static {
                 }
                 Some(Step::StartDialog(story)) => {
                     self.steps = &self.steps[1..];
-                    actions.push(Action::Dialog(*story));
+                    world.write_resource::<DialogMessages>().start(story())
                 }
             }
         }
-        actions
     }
 }
