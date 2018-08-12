@@ -6,6 +6,7 @@ use crate::entity::{
     meta::{Dialog, Loading},
     door::Door,
     state_pickup::StatePickup,
+    character::mystery_man,
 };
 use crate::tile_grid::town;
 use crate::resource::{
@@ -42,6 +43,7 @@ scene! {
         }
         if builder.get_resource::<State>().is(MainState::RunToTheAlley) {
             builder.add_entity(StatePickup(TILE_SIZE * 24, TILE_SIZE * 7, TILE_SIZE as u32, TILE_SIZE as u32, MainState::ArriveInTheAlley));
+            builder.add_entity(mystery_man::Intro(TILE_SIZE * 19, TILE_SIZE * 13));
         }
         builder
             .pipe(town::collisions)

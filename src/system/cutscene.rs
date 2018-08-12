@@ -2,6 +2,7 @@ use game_engine::system;
 use crate::resource::{
     cutscene::CutsceneActions,
     dialog::DialogMessages,
+    state::State,
 };
 use crate::component::{
     id::Id,
@@ -19,6 +20,7 @@ system! {
             entities: &Entities,
             cutscene_actions: &Resource<CutsceneActions>,
             dialog_messages: &mut Resource<DialogMessages>,
+            state: &mut Resource<State>,
             id: &Component<Id>,
             move_path: &mut Component<MovePath>,
         ) {
@@ -32,6 +34,7 @@ system! {
                             }
                         }
                     }
+                    Action::StateChange(new_state) => state.enter(*new_state),
                 }
             }
         }

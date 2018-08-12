@@ -2,9 +2,7 @@
 
 mod main;
 
-pub use self::{
-    main::MainState,
-};
+pub use self::main::MainState;
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum Progress {

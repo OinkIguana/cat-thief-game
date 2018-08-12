@@ -1,3 +1,4 @@
+pub mod character;
 pub mod meta;
 pub mod door;
 pub mod player;

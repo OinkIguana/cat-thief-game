@@ -9,6 +9,7 @@ use crate::component::{
 };
 use crate::resource::{
     dialog::{DialogEvents, DialogMessages},
+    state::MainState,
 };
 
 #[derive(Clone, Debug)]
@@ -21,12 +22,14 @@ where for<'a> E: Deserialize<'a> + PartialEq + Sync + Send + 'static {
     StartDialog(fn() -> Story),
     Delay(u32),
     Break,
+    StateChange(MainState),
 }
 
 #[derive(Clone, Debug)]
 pub enum Action {
     Move(Id, &'static [Point<f32>]),
     Dialog(fn() -> Story),
+    StateChange(MainState),
 }
 
 pub trait Cutscene: Sync + Send {
@@ -69,6 +72,10 @@ where for<'a> E: Deserialize<'a> + PartialEq + Sync + Send + 'static {
         'outer: loop {
             match self.steps.first() {
                 None => break,
+                Some(Step::StateChange(state)) => {
+                    self.steps = &self.steps[1..];
+                    actions.push(Action::StateChange(*state));
+                }
                 Some(Step::Break) => {
                     self.steps = &self.steps[1..];
                     break;

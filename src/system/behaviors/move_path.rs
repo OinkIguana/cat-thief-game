@@ -23,6 +23,7 @@ system! {
                 if let Some(mut target) = move_path.target() {
                     while target == position.0 {
                         move_path.arrive();
+                        *velocity = Velocity::default();
                         match move_path.target() {
                             Some(t) => target = t,
                             None => continue 'entities,
