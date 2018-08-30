@@ -6,6 +6,7 @@ pub mod marker;
 pub mod collision_box;
 pub mod door;
 pub mod id;
+pub mod inventory;
 pub mod position;
 pub mod state_target;
 pub mod velocity;
@@ -23,4 +24,5 @@ pub fn register<'a, 'b>(game: Game<'a, 'b>) -> Game<'a, 'b> {
         .pipe(graphics::register)
         .pipe(marker::register)
         .pipe(behavior::register)
+        .pipe(inventory::register)
 }
