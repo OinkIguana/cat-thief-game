@@ -1,4 +1,4 @@
-#![feature(range_contains, const_fn, generators, generator_trait, pattern_parentheses, in_band_lifetimes)]
+#![feature(range_contains, const_fn, generators, generator_trait, in_band_lifetimes)]
 #![deny(bare_trait_objects)]
 #![warn(rust_2018_idioms)]
 
