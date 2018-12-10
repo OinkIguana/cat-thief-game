@@ -20,7 +20,7 @@ pub fn write_inks<'a, W: Write>(file: &mut W, paths: ReadDir) {
                 name,
                 ink,
             );
-            writeln!(file, "{}", generated);
+            writeln!(file, "{}", generated).unwrap();
         }
     }
 }

@@ -27,7 +27,7 @@ impl Drawable for SpriteDrawable {
 
     fn render(&self, canvas: &mut dyn Canvas) -> game_engine::Result<()> {
         for sprite in &self.sprites {
-            canvas.draw_sprite(self.position, self.frame, (*sprite).clone())?;
+            canvas.draw_sprite(self.position, self.frame, sprite)?;
         }
         Ok(())
     }
