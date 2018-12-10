@@ -1,4 +1,4 @@
-#![feature(const_fn, range_contains, generators, generator_trait, in_band_lifetimes)]
+#![feature(range_contains, const_fn, generators, generator_trait, in_band_lifetimes)]
 #![deny(bare_trait_objects)]
 
 pub mod component;
